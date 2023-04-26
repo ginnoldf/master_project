@@ -9,10 +9,7 @@ def coarse_grain(datain):
 
 
 def make_mean(tt):
-    print("shape of tt: " + str(np.shape(tt)))
-    tt_mean = np.mean(tt, axis=(1, 2))#.reshape(1, -1, 1)
-    print("shape of np.mean(tt, axis=(1, 2)): " + str(np.shape(np.mean(tt, axis=(1, 2)))))
-    print("shape of tt_mean: " + str(np.shape(tt_mean)))
+    tt_mean = np.mean(tt, axis=(1, 2))
     return tt_mean
 
 
@@ -34,19 +31,7 @@ def make_tke(w, u, v):
     vv = coarse_grain(v * v) - coarse_grain(v) * coarse_grain(v)
     ww = coarse_grain(w * w) - coarse_grain(w) * coarse_grain(w)
 
-    W = coarse_grain(w)
-    V = coarse_grain(v)
-    U = coarse_grain(u)
-
-    partu = coarse_grain(w * u * u) - W * U * U - W * (coarse_grain(u * u) - U * U) \
-            - 2 * U * (coarse_grain(u * w) - U * W)
-    partv = coarse_grain(w * v * v) - W * V * V - W * (coarse_grain(v * v) - V * V) \
-            - 2 * V * (coarse_grain(v * w) - V * W)
-    partw = coarse_grain(w * w * w) - W * W * W - W * (coarse_grain(w * w) - W * W) \
-            - 2 * W * (coarse_grain(w * w) - W * W)
-    we = partu + partv + partw
-
-    return 0.5 * (ww + uu + vv).reshape(1, -1), ww.reshape(1, -1), 0.5 * we.reshape(1, -1)
+    return 0.5 * (ww + uu + vv).reshape(1, -1)#, ww.reshape(1, -1), 0.5 * we.reshape(1, -1)
 
 
 def make_filelist(search_dir, search_for, file_ending):
