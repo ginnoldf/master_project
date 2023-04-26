@@ -101,7 +101,7 @@ def main():
 
         # logging
         toc = time.perf_counter()
-        print("Calculation done for timestep " + str(timestep_counter) + " in {toc - tic:0.4f}s.")
+        print("Calculation done for timestep " + str(timestep_counter) + f" in {toc - tic:0.4f}s.")
 
     # save constructed arrays in files
     np.save(output_dir + sim_name + '_v3' + '_scalar_mean', scalar_mean)
