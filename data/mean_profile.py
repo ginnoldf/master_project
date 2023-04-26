@@ -14,7 +14,7 @@ def make_mean(tt):
 
 
 def make_flux(tt, w, t_sgs):
-    wt = (coarse_grain(w * tt) - coarse_grain(w) * coarse_grain(tt) + coarse_grain(t_sgs)).reshape(1, -1, 1)
+    wt = (coarse_grain(w * tt) - coarse_grain(w) * coarse_grain(tt) + coarse_grain(t_sgs))#.reshape(1, -1, 1)
     return wt
 
 
@@ -31,7 +31,7 @@ def make_tke(w, u, v):
     vv = coarse_grain(v * v) - coarse_grain(v) * coarse_grain(v)
     ww = coarse_grain(w * w) - coarse_grain(w) * coarse_grain(w)
 
-    return 0.5 * (ww + uu + vv).reshape(1, -1)#, ww.reshape(1, -1), 0.5 * we.reshape(1, -1)
+    return 0.5 * (ww + uu + vv).reshape(1, -1)
 
 
 def make_filelist(search_dir, search_for, file_ending):
