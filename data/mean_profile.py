@@ -65,6 +65,9 @@ def main():
     tkes = np.zeros(shape=(num_timesteps, num_vertical_levels))
     all_flux = np.zeros(shape=(num_timesteps, num_vertical_levels))
 
+    # logging
+    print("We will handle " + str(num_timesteps) + " timesteps.")
+
     # iterate over given timesteps from LES
     for timestep_counter in range(num_timesteps):
         timestep = file_list[timestep_counter]
@@ -96,6 +99,9 @@ def main():
         scalar_mean[timestep_counter] = make_mean(theta)
         tkes[timestep_counter] = make_tke(w_velocity, u_velocity, v_velocity)
         all_flux[timestep_counter] = make_flux(theta, w_velocity, t_sgs)
+
+        # logging
+        print("Calculation done for timestep " + str(timestep_counter) + " .")
 
     # save constructed arrays in files
     np.save(output_dir + sim_name + '_v3' + '_scalar_mean', scalar_mean)
