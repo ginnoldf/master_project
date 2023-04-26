@@ -1,22 +1,33 @@
 import os
 import numpy as np
 
-
 TSCALE = 300
+
+
 def coarse_grain(datain):
     return np.mean(datain, axis=(1, 2))
+
+
 def make_mean(tt):
+    print("shape of tt: " + str(np.shape(tt)))
     tt_mean = np.mean(tt, axis=(1, 2)).reshape(1, -1, 1)
+    print("shape of tt_mean: " + str(np.shape(tt_mean)))
     return tt_mean
+
+
 def make_flux(tt, w, t_sgs):
     wt = (coarse_grain(w * tt) - coarse_grain(w) * coarse_grain(tt) + coarse_grain(t_sgs)).reshape(1, -1, 1)
     return wt
+
+
 def shift(data):
     zmax = data.shape[0]
     dd = np.copy(data)
     for zz in range(1, zmax):
         dd[zz, :, :] = 0.5 * (data[zz - 1, :, :] + data[zz, :, :])
     return dd
+
+
 def make_tke(w, u, v):
     uu = coarse_grain(u * u) - coarse_grain(u) * coarse_grain(u)
     vv = coarse_grain(v * v) - coarse_grain(v) * coarse_grain(v)
