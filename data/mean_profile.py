@@ -1,4 +1,5 @@
 import os
+import time
 import numpy as np
 
 TSCALE = 300
@@ -14,7 +15,7 @@ def make_mean(tt):
 
 
 def make_flux(tt, w, t_sgs):
-    wt = (coarse_grain(w * tt) - coarse_grain(w) * coarse_grain(tt) + coarse_grain(t_sgs))#.reshape(1, -1, 1)
+    wt = (coarse_grain(w * tt) - coarse_grain(w) * coarse_grain(tt) + coarse_grain(t_sgs))
     return wt
 
 
@@ -67,6 +68,7 @@ def main():
 
     # iterate over given timesteps from LES
     for timestep_counter in range(num_timesteps):
+        tic = time.perf_counter()
         timestep = file_list[timestep_counter]
 
         # constructing the name of the inputfile (LES output)
@@ -98,7 +100,8 @@ def main():
         all_flux[timestep_counter] = make_flux(theta, w_velocity, t_sgs)
 
         # logging
-        print("Calculation done for timestep " + str(timestep_counter) + " .")
+        toc = time.perf_counter()
+        print("Calculation done for timestep " + str(timestep_counter) + " in {toc - tic:0.4f}s.")
 
     # save constructed arrays in files
     np.save(output_dir + sim_name + '_v3' + '_scalar_mean', scalar_mean)
