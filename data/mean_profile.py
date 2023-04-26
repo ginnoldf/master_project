@@ -10,7 +10,7 @@ def coarse_grain(datain):
 
 def make_mean(tt):
     print("shape of tt: " + str(np.shape(tt)))
-    tt_mean = np.mean(tt, axis=(1, 2)).reshape(1, -1, 1)
+    tt_mean = np.mean(tt, axis=(1, 2))#.reshape(1, -1, 1)
     print("shape of np.mean(tt, axis=(1, 2)): " + str(np.shape(np.mean(tt, axis=(1, 2)))))
     print("shape of tt_mean: " + str(np.shape(tt_mean)))
     return tt_mean
