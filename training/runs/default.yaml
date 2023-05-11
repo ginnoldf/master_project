@@ -1,0 +1,17 @@
+data:
+  dataConfigPath: data/training_data/data_config.yaml
+  lz: 1
+  lxy: 256
+  batchSize: 4
+  trainSplit: 0.8
+
+training:
+  epochs: 1000
+  model:
+    name: simple
+  loss: mse
+  optimizer:
+    name: sgd
+    learningRate: 0.0001
+    momentum: 0.9
+

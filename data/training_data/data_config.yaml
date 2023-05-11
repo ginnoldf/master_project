@@ -1,0 +1,67 @@
+data:
+  lz1:
+    lxy16:
+      sim1601:
+        theta: data/training_data/L_16/16_01/theta.npy
+        tke: data/training_data/L_16/16_01/tkes.npy
+        turbHeatFlux: data/training_data/L_16/16_01/turb_heat_flux.npy
+      sim1603:
+        theta: data/training_data/L_16/16_03/theta.npy
+        tke: data/training_data/L_16/16_03/tkes.npy
+        turbHeatFlux: data/training_data/L_16/16_03/turb_heat_flux.npy
+      sim1606:
+        theta: data/training_data/L_16/16_06/theta.npy
+        tke: data/training_data/L_16/16_06/tkes.npy
+        turbHeatFlux: data/training_data/L_16/16_06/turb_heat_flux.npy
+    lxy32:
+      sim1601:
+        theta: data/training_data/L_32/16_01/theta.npy
+        tke: data/training_data/L_32/16_01/tkes.npy
+        turbHeatFlux: data/training_data/L_32/16_01/turb_heat_flux.npy
+      sim1603:
+        theta: data/training_data/L_32/16_03/theta.npy
+        tkes: data/training_data/L_32/16_03/tkes.npy
+        turbHeatFlux: data/training_data/L_32/16_03/turb_heat_flux.npy
+      sim1606:
+        theta: data/training_data/L_32/16_06/theta.npy
+        tke: data/training_data/L_32/16_06/tkes.npy
+        turbHeatFlux: data/training_data/L_32/16_06/turb_heat_flux.npy
+    lxy64:
+      sim1601:
+        theta: data/training_data/L_64/16_01/theta.npy
+        tke: data/training_data/L_64/16_01/tkes.npy
+        turbHeatFlux: data/training_data/L_64/16_01/turb_heat_flux.npy
+      sim1603:
+        theta: data/training_data/L_64/16_03/theta.npy
+        tke: data/training_data/L_64/16_03/tkes.npy
+        turbHeatFlux: data/training_data/L_64/16_03/turb_heat_flux.npy
+      sim1606:
+        theta: data/training_data/L_64/16_06/theta.npy
+        tke: data/training_data/L_64/16_06/tkes.npy
+        turbHeatFlux: data/training_data/L_64/16_06/turb_heat_flux.npy
+    lxy128:
+      sim1601:
+        theta: data/training_data/L_128/16_01/theta.npy
+        tke: data/training_data/L_128/16_01/tkes.npy
+        turbHeatFlux: data/training_data/L_128/16_01/turb_heat_flux.npy
+      sim1603:
+        theta: data/training_data/L_128/16_03/theta.npy
+        tke: data/training_data/L_128/16_03/tkes.npy
+        turbHeatFlux: data/training_data/L_128/16_03/turb_heat_flux.npy
+      sim1606:
+        theta: data/training_data/L_128/16_06/theta.npy
+        tke: data/training_data/L_128/16_06/tkes.npy
+        turbHeatFlux: data/training_data/L_128/16_06/turb_heat_flux.npy
+    lxy256:
+      sim1601:
+        theta: data/training_data/L_256/16_01/theta.npy
+        tke: data/training_data/L_256/16_01/tkes.npy
+        turbHeatFlux: data/training_data/L_256/16_01/turb_heat_flux.npy
+      sim1603:
+        theta: data/training_data/L_256/16_03/theta.npy
+        tke: data/training_data/L_256/16_03/tkes.npy
+        turbHeatFlux: data/training_data/L_256/16_03/turb_heat_flux.npy
+      sim1606:
+        theta: data/training_data/L_256/16_06/theta.npy
+        tke: data/training_data/L_256/16_06/tkes.npy
+        turbHeatFlux: data/training_data/L_256/16_06/turb_heat_flux.npy

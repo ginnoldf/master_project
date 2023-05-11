@@ -1,2 +1,1 @@
-# master_project
-My master project
+# Master Project
