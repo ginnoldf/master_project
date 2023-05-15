@@ -1,8 +1,6 @@
-import torch
-
-from utils import TrainingConfig
-import training.data as data
-from models import SimpleModel
+from config import TrainingConfig
+from writer import Writer
+import data
 import train
 
 
@@ -10,22 +8,23 @@ def main():
     # load training configuration
     config = TrainingConfig()
 
-    # load data and structure it to train and test loader
-    train_loader, test_loader = data.get_data_loaders(config)
+    # create writer
+    writer = Writer(config.logdir)
 
-    # define model, loss and optimizer
-    model = SimpleModel().double()
-    loss_fn = torch.nn.MSELoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=config.lr, momentum=config.momentum)
+    # load data and structure it to train and test loader
+    train_loader, test_loader = data.get_data_loaders(config=config)
 
     # training
     train.train(
+        writer=writer,
         epochs=config.epochs,
+        eval_epochs=config.eval_epochs,
         train_loader=train_loader,
         test_loader=test_loader,
-        optimizer=optimizer,
-        model=model,
-        loss_fn=loss_fn
+        optimizer=config.optimizer,
+        lr_scheduler=config.lr_scheduler,
+        model=config.model,
+        loss_fn=config.loss_fn
     )
 
 

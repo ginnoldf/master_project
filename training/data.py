@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from torch.utils.data import TensorDataset, DataLoader, random_split
 
-from utils import TrainingConfig
+from config import TrainingConfig
 
 
 # load data config to read file paths from
@@ -63,6 +63,6 @@ def get_data_loaders(config: TrainingConfig):
 
     # create torch dataloader from datasets
     train_loader = DataLoader(training_set, batch_size=config.bsize, shuffle=True)
-    test_loader = DataLoader(test_set, batch_size=4, shuffle=False)
+    test_loader = DataLoader(test_set, batch_size=1, shuffle=False)
 
     return train_loader, test_loader

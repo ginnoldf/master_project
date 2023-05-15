@@ -1,14 +1,18 @@
+from writer import Writer
+from evaluation import evaluation
+
 import torch
 from torch.utils.data import DataLoader
 
 
 def train_one_epoch(
+        writer: Writer,
         train_loader: DataLoader,
         optimizer: torch.optim.Optimizer,
         model: torch.nn.Module,
-        loss_fn
+        loss_fn,
+        global_steps_start: int
 ):
-    running_loss = 0.
     for i, batch in enumerate(train_loader):
         # load batch data
         inputs, outputs_true = batch
@@ -27,42 +31,40 @@ def train_one_epoch(
         optimizer.step()
 
         # Gather data and report
-        running_loss += loss.item()
-        if i % 20 == 19:
-            last_loss = running_loss / 1000
-            print('batch {} loss: {}'.format(i + 1, last_loss))
-            running_loss = 0.
+        writer.step(global_step=global_steps_start + (i + 1) * train_loader.batch_size,
+                    lr=optimizer.state_dict()['param_groups'][0]['lr'],
+                    loss_per_sample=loss.item())
 
 
 def train(
+        writer: Writer,
         epochs: int,
         train_loader: DataLoader,
         test_loader: DataLoader,
         optimizer: torch.optim.Optimizer,
+        lr_scheduler: torch.optim.lr_scheduler.LRScheduler,
         model: torch.nn.Module,
-        loss_fn
+        loss_fn,
+        eval_epochs: int
 ):
     for epoch in range(epochs):
-        print('epoch {}:'.format(epoch))
-
         # train
         model.train()
-        train_one_epoch(
-            train_loader=train_loader,
-            optimizer=optimizer,
-            model=model,
-            loss_fn=loss_fn
-        )
+        train_one_epoch(writer=writer,
+                        train_loader=train_loader,
+                        model=model,
+                        loss_fn=loss_fn,
+                        optimizer=optimizer,
+                        global_steps_start=epoch * len(train_loader.dataset))
+
+        # lr scheduling
+        lr_scheduler.step()
 
         # test model
-        if epoch % 100 == 99:
-            model.eval()
-            running_test_loss = 0.0
-            for i, test_batch in enumerate(test_loader):
-                test_inputs, test_outputs_true = test_batch
-                test_outputs_model = model(test_inputs.double())
-                test_loss = loss_fn(test_outputs_model, test_outputs_true)
-                running_test_loss += test_loss
-            avg_test_loss = running_test_loss / (i + 1)
-            print('test loss {}'.format(avg_test_loss))
-
+        if epoch % eval_epochs == 0:
+            evaluation(writer=writer,
+                       epoch=epoch,
+                       model=model,
+                       test_loader=test_loader,
+                       loss_fn=loss_fn,
+                       global_step=len(train_loader.dataset) * (epoch + 1))
