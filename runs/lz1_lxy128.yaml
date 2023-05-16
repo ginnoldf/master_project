@@ -1,0 +1,24 @@
+writer:
+  logdir: runs/lz1_lxy128
+
+data:
+  dataConfigPath: datasets/training_data/data_config.yaml
+  lz: 1
+  lxy: 128
+  batchSize: 4
+  trainSplit: 0.8
+
+training:
+  epochs: 5000
+  eval_epochs: 50
+  model:
+    name: simple
+  loss: mse
+  optimizer:
+    name: sgd
+    lr: 0.001
+    momentum: 0.9
+  lrScheduler:
+    name: step
+    stepStepSize: 1000
+    stepGamma: 0.5

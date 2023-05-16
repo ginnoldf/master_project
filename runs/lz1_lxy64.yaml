@@ -1,16 +1,16 @@
 writer:
-  logdir: training/runs/default
+  logdir: runs/lz1_lxy64
 
 data:
   dataConfigPath: datasets/training_data/data_config.yaml
   lz: 1
-  lxy: 256
+  lxy: 64
   batchSize: 4
   trainSplit: 0.8
 
 training:
-  epochs: 10000
-  eval_epochs: 200
+  epochs: 5000
+  eval_epochs: 50
   model:
     name: simple
   loss: mse
@@ -20,6 +20,5 @@ training:
     momentum: 0.9
   lrScheduler:
     name: step
-    stepStepSize: 2000
+    stepStepSize: 1000
     stepGamma: 0.5
-

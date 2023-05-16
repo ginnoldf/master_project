@@ -17,7 +17,7 @@ def load_data_config(data_config_path: string):
 
 
 def data_reshape(np_array: np.ndarray):
-    (timesteps, z_dim ,x_dim, y_dim) = np_array.shape
+    (timesteps, z_dim, x_dim, y_dim) = np_array.shape
     num_training_samples = timesteps * x_dim * y_dim
     training_samples = np.zeros((num_training_samples, z_dim))
     for timestep in range(timesteps):
@@ -27,10 +27,8 @@ def data_reshape(np_array: np.ndarray):
     return training_samples
 
 
-def load_data(data_config: Dict, lz: int, lxy: int):
+def load_data(data_config: Dict, lz_key: string, lxy_key: string):
     theta_np_arrays, tkes_np_arrays, turb_heat_flux_np_arrays = [], [], []
-    lz_key = 'lz' + str(lz)
-    lxy_key = 'lxy' + str(lxy)
 
     # load all numpy arrays
     for sim in data_config[lz_key][lxy_key]:
@@ -49,20 +47,34 @@ def load_data(data_config: Dict, lz: int, lxy: int):
 def get_data_loaders(config: TrainingConfig):
     # read data from disk to numpy arrays
     data_config = load_data_config(config.data_config_path)
-    theta, tkes, turb_heat_flux = load_data(data_config=data_config, lz=config.lz, lxy=config.lxy)
 
-    # create structured input data
-    in_np = np.stack((theta, tkes), axis=1)
+    # load all datasets that are described in the data config file
+    all_dataloaders = {}
+    train_loader, test_loader = (None, None)
+    for lz_key in data_config:
+        all_dataloaders[lz_key] = []
+        for lxy_key in data_config[lz_key]:
+            # load data
+            theta, tkes, turb_heat_flux = load_data(data_config=data_config, lz_key=lz_key, lxy_key=lxy_key)
 
-    # create torch train and test datasets from numpy arrays
-    dataset_size = theta.shape[0]
-    train_size = round(dataset_size * config.train_split)
-    test_size = dataset_size - train_size
-    dataset = TensorDataset(torch.from_numpy(in_np), torch.from_numpy(turb_heat_flux))
-    training_set, test_set = random_split(dataset, [train_size, test_size])
+            # create structured input data
+            in_np = np.stack((theta, tkes), axis=1)
 
-    # create torch dataloader from datasets
-    train_loader = DataLoader(training_set, batch_size=config.bsize, shuffle=True)
-    test_loader = DataLoader(test_set, batch_size=1, shuffle=False)
+            # create torch train and test datasets from numpy arrays
+            dataset_size = theta.shape[0]
+            dataset = TensorDataset(torch.from_numpy(in_np), torch.from_numpy(turb_heat_flux))
 
-    return train_loader, test_loader
+            # the set that we use to train, needs to be split into a train and a test set
+            if lz_key == 'lz' + str(config.lz) and lxy_key == 'lxy' + str(config.lxy):
+                train_size = round(dataset_size * config.train_split)
+                test_size = dataset_size - train_size
+                training_set, test_set = random_split(dataset, [train_size, test_size])
+
+                # create torch dataloader from datasets
+                train_loader = DataLoader(training_set, batch_size=config.bsize, shuffle=True)
+                test_loader = DataLoader(test_set, batch_size=32, shuffle=False)
+
+            all_dataloaders[lz_key].append({'lxy_key': lxy_key,
+                                            'dataloader': DataLoader(dataset, batch_size=32, shuffle=False)})
+
+    return train_loader, test_loader, all_dataloaders

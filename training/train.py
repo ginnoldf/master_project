@@ -1,8 +1,9 @@
-from writer import Writer
-from evaluation import evaluation
-
 import torch
 from torch.utils.data import DataLoader
+from typing import Dict
+
+from writer import Writer
+from evaluation import evaluation
 
 
 def train_one_epoch(
@@ -41,6 +42,7 @@ def train(
         epochs: int,
         train_loader: DataLoader,
         test_loader: DataLoader,
+        all_dataloaders: Dict,
         optimizer: torch.optim.Optimizer,
         lr_scheduler: torch.optim.lr_scheduler.LRScheduler,
         model: torch.nn.Module,
@@ -66,5 +68,6 @@ def train(
                        epoch=epoch,
                        model=model,
                        test_loader=test_loader,
+                       all_dataloaders=all_dataloaders,
                        loss_fn=loss_fn,
                        global_step=len(train_loader.dataset) * (epoch + 1))

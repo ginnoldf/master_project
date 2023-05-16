@@ -1,4 +1,6 @@
 import argparse
+import datetime
+import os
 import pathlib
 import yaml
 from typing import Dict
@@ -13,7 +15,7 @@ def build_argparser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--config-file",
         type=pathlib.Path,
-        default="training/runs/default.yaml",
+        default="runs/default.yaml",
         help="path to the file describing the data locations"
     )
     return parser
@@ -57,23 +59,32 @@ class TrainingConfig:
 
         # read config file
         config_file_path = parser.parse_args().config_file
-        with open(config_file_path) as f:
-            config_dict = yaml.safe_load(f)
+        with open(config_file_path, 'r') as f:
+            self.config_dict = yaml.safe_load(f)
 
-        self.logdir = config_dict['writer']['logdir']
+        # add timestamp
+        self.config_dict['timestamp'] = datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+
+        self.logdir = self.config_dict['writer']['logdir']
+        if not os.path.exists(self.logdir):
+            os.makedirs(self.logdir)
 
         # load data config
-        self.data_config_path = config_dict['data']['dataConfigPath']
-        self.lz = config_dict['data']['lz']
-        self.lxy = config_dict['data']['lxy']
-        self.bsize = config_dict['data']['batchSize']
-        self.train_split = config_dict['data']['trainSplit']
+        self.data_config_path = self.config_dict['data']['dataConfigPath']
+        self.lz = self.config_dict['data']['lz']
+        self.lxy = self.config_dict['data']['lxy']
+        self.bsize = self.config_dict['data']['batchSize']
+        self.train_split = self.config_dict['data']['trainSplit']
 
-        self.epochs = config_dict['training']['epochs']
-        self.eval_epochs = config_dict['training']['eval_epochs']
-        self.model = get_model(config_dict['training']['model'])
-        self.loss_fn = get_loss_fn(config_dict['training']['loss'])
-        self.optimizer = get_optimizer(optimizer=config_dict['training']['optimizer'],
+        self.epochs = self.config_dict['training']['epochs']
+        self.eval_epochs = self.config_dict['training']['eval_epochs']
+        self.model = get_model(self.config_dict['training']['model'])
+        self.loss_fn = get_loss_fn(self.config_dict['training']['loss'])
+        self.optimizer = get_optimizer(optimizer=self.config_dict['training']['optimizer'],
                                        model=self.model)
-        self.lr_scheduler = get_lr_scheduler(lr_scheduler=config_dict['training']['lrScheduler'],
+        self.lr_scheduler = get_lr_scheduler(lr_scheduler=self.config_dict['training']['lrScheduler'],
                                              optimizer=self.optimizer)
+
+    def save(self, logdir):
+        with open(os.path.join(logdir, 'config.yaml'), 'w') as f:
+            yaml.dump(self.config_dict, f)

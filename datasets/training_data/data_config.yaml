@@ -7,7 +7,7 @@ data:
         turbHeatFlux: datasets/training_data/L_16/16_01/turb_heat_flux.npy
       sim1603:
         theta: datasets/training_data/L_16/16_03/theta.npy
-        tke: sets/training_data/L_16/16_03/tkes.npy
+        tke: datasets/training_data/L_16/16_03/tkes.npy
         turbHeatFlux: datasets/training_data/L_16/16_03/turb_heat_flux.npy
       sim1606:
         theta: datasets/training_data/L_16/16_06/theta.npy
@@ -20,7 +20,7 @@ data:
         turbHeatFlux: datasets/training_data/L_32/16_01/turb_heat_flux.npy
       sim1603:
         theta: datasets/training_data/L_32/16_03/theta.npy
-        tkes: datasets/training_data/L_32/16_03/tkes.npy
+        tke: datasets/training_data/L_32/16_03/tkes.npy
         turbHeatFlux: datasets/training_data/L_32/16_03/turb_heat_flux.npy
       sim1606:
         theta: datasets/training_data/L_32/16_06/theta.npy
