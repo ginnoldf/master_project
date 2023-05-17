@@ -2,23 +2,26 @@ import argparse
 import numpy as np
 from pathlib import Path
 
-parser = argparse.ArgumentParser(description='Args for coarse_grain.py')
 
-parser.add_argument('--sim_dir', default='/glade/scratch/sshamekh/')
-parser.add_argument('--input_prefix', default='cbl_')
-parser.add_argument('--sim_name')
-parser.add_argument('--output_dir')
-parser.add_argument('--input_dim_z', type=int, default=256)
-parser.add_argument('--input_dim_x', type=int, default=256)
-parser.add_argument('--input_dim_y', type=int, default=256)
-parser.add_argument('--Lz', type=int, default=1)
-parser.add_argument('--Lx', type=int, default=256)
-parser.add_argument('--Ly', type=int, default=256)
+def get_args():
+    parser = argparse.ArgumentParser(description='Args for coarse_grain.py')
 
-args = parser.parse_args()
+    parser.add_argument('--sim_dir', default='/glade/scratch/sshamekh/')
+    parser.add_argument('--input_prefix', default='cbl_')
+    parser.add_argument('--sim_name')
+    parser.add_argument('--output_dir')
+    parser.add_argument('--input_dim_z', type=int, default=256)
+    parser.add_argument('--input_dim_x', type=int, default=256)
+    parser.add_argument('--input_dim_y', type=int, default=256)
+    parser.add_argument('--Lz', type=int, default=1)
+    parser.add_argument('--Lx', type=int, default=256)
+    parser.add_argument('--Ly', type=int, default=256)
+
+    return parser.parse_args()
 
 
 class Config:
+    args = get_args()
     input_dir = Path(args.simdir) / args.input_prefix + args.sim_name / 'output'
     output_dir = Path(args.output_dir)
     sim_name = args.sim_name

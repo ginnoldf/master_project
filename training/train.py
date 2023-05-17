@@ -2,8 +2,8 @@ import torch
 from torch.utils.data import DataLoader
 from typing import Dict
 
-from writer import Writer
-from evaluation import evaluation
+from training.writer import Writer
+from training.evaluation import evaluation
 
 
 def train_one_epoch(

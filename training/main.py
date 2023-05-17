@@ -1,7 +1,7 @@
-from config import TrainingConfig
-from writer import Writer
-import data
-import train
+from training.config import TrainingConfig
+from training.writer import Writer
+import training.data as data
+import training.train as train
 
 
 def main():

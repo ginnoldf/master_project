@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from torch.utils.data import TensorDataset, DataLoader, random_split
 
-from config import TrainingConfig
+from training.config import TrainingConfig
 
 
 # load data config to read file paths from

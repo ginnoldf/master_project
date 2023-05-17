@@ -9,8 +9,8 @@ data:
   trainSplit: 0.8
 
 training:
-  epochs: 5000
-  eval_epochs: 50
+  epochs: 2000
+  eval_epochs: 20
   model:
     name: simple
   loss: mse
@@ -20,5 +20,5 @@ training:
     momentum: 0.9
   lrScheduler:
     name: step
-    stepStepSize: 1000
+    stepStepSize: 500
     stepGamma: 0.5

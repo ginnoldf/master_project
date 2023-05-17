@@ -5,12 +5,12 @@ data:
   dataConfigPath: datasets/training_data/data_config.yaml
   lz: 1
   lxy: 16
-  batchSize: 4
+  batchSize: 16
   trainSplit: 0.8
 
 training:
-  epochs: 5000
-  eval_epochs: 50
+  epochs: 500
+  eval_epochs: 4
   model:
     name: simple
   loss: mse
@@ -20,5 +20,5 @@ training:
     momentum: 0.9
   lrScheduler:
     name: step
-    stepStepSize: 1000
+    stepStepSize: 100
     stepGamma: 0.5

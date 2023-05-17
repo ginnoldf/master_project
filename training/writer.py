@@ -2,10 +2,10 @@ import string
 import os
 
 import torch
-import yaml
 from tensorboardX import SummaryWriter
 
-from config import TrainingConfig
+from training.config import TrainingConfig
+from training.plot import plot_means, plot_samples
 
 
 class Writer:
@@ -22,12 +22,30 @@ class Writer:
 
     def evaluation(self, global_step, epoch, avg_test_loss, all_datasets_evaluation):
         self.tb_writer.add_scalar('evaluation loss per sample', scalar_value=avg_test_loss, global_step=global_step)
-        print('Epoch: ' + str(epoch) + ' ,Evaluation loss per sample: ' + str(avg_test_loss))
+        print('Epoch: ' + str(epoch) + ', Evaluation loss per sample: ' + str(avg_test_loss))
 
         for dataset_evaluation in all_datasets_evaluation:
-            self.tb_writer.add_scalar(dataset_evaluation['metric'],
+            self.tb_writer.add_scalar(dataset_evaluation['dataset'],
                                       scalar_value=dataset_evaluation['avg_loss'],
                                       global_step=global_step)
+
+            # create plot directory if necessary and plot means
+            means_plot_dir = os.path.join(self.logdir, 'eval', dataset_evaluation['dataset'], 'means')
+            if not os.path.exists(means_plot_dir):
+                os.makedirs(means_plot_dir)
+            means_plot_filepath = os.path.join(means_plot_dir, 'epoch' + str(epoch) + '.png')
+            plot_means(true_mean=dataset_evaluation['true_mean'],
+                       true_std=dataset_evaluation['true_std'],
+                       pred_mean=dataset_evaluation['pred_mean'],
+                       filepath=means_plot_filepath)
+
+            # create plot directory if necessary and plot samples
+            samples_plot_dir = os.path.join(self.logdir, 'eval', dataset_evaluation['dataset'], 'samples')
+            if not os.path.exists(samples_plot_dir):
+                os.makedirs(samples_plot_dir)
+            samples_plot_filepath = os.path.join(samples_plot_dir, 'epoch' + str(epoch) + '.png')
+            plot_samples(sample_evaluation=dataset_evaluation['sample_evaluation'],
+                         filepath=samples_plot_filepath)
 
     def end(self, config: TrainingConfig):
         # save config to know specifics of the experiment
@@ -35,4 +53,3 @@ class Writer:
 
         # save model to reuse it
         torch.save(config.model.state_dict(), os.path.join(self.logdir, 'model.pt'))
-

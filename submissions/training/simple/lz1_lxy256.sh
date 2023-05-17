@@ -10,5 +10,6 @@
 ### Run program
 module load conda
 conda activate npl
+conda env list
 
 python3 training/main.py --config-file=runs/lz1_lxy256.yaml

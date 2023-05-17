@@ -9,7 +9,7 @@ data:
   trainSplit: 0.8
 
 training:
-  epochs: 10
+  epochs: 100
   eval_epochs: 50
   model:
     name: simple

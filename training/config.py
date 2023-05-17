@@ -7,7 +7,7 @@ from typing import Dict
 import string
 import torch
 
-import models
+import training.models as models
 
 
 def build_argparser() -> argparse.ArgumentParser:
