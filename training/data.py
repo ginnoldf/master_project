@@ -2,6 +2,7 @@ import string
 import yaml
 from typing import Dict
 import numpy as np
+import os
 
 import torch
 from torch.utils.data import TensorDataset, DataLoader, random_split
@@ -32,9 +33,12 @@ def load_data(data_config: Dict, lz_key: string, lxy_key: string):
 
     # load all numpy arrays
     for sim in data_config[lz_key][lxy_key]:
-        theta_np_arrays.append(data_reshape(np.load(data_config[lz_key][lxy_key][sim]['theta'])))
-        tkes_np_arrays.append(data_reshape(np.load(data_config[lz_key][lxy_key][sim]['tke'])))
-        turb_heat_flux_np_arrays.append(data_reshape(np.load(data_config[lz_key][lxy_key][sim]['turbHeatFlux'])))
+        theta_path = os.path.join(data_config[lz_key][lxy_key][sim], 'theta.npy')
+        tkes_path = os.path.join(data_config[lz_key][lxy_key][sim], 'tkes.npy')
+        turb_heat_flux_path = os.path.join(data_config[lz_key][lxy_key][sim], 'turb_heat_flux.npy')
+        theta_np_arrays.append(data_reshape(np.load(theta_path)))
+        tkes_np_arrays.append(data_reshape(np.load(tkes_path)))
+        turb_heat_flux_np_arrays.append(data_reshape(np.load(turb_heat_flux_path)))
 
     # concat numpy arrays to return a complete dataset
     theta = np.concatenate(theta_np_arrays)

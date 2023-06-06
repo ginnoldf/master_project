@@ -44,7 +44,8 @@ def train(
         test_loader: DataLoader,
         all_dataloaders: Dict,
         optimizer: torch.optim.Optimizer,
-        lr_scheduler: torch.optim.lr_scheduler.LRScheduler,
+        #lr_scheduler: torch.optim.lr_scheduler.LRScheduler,
+        lr_scheduler,
         model: torch.nn.Module,
         loss_fn,
         eval_epochs: int

@@ -1,0 +1,25 @@
+writer:
+  logdir: runs/default
+
+data:
+  dataConfigPath: datasets/training_data/data_config.yaml
+  lz: 2
+  lxy: 256
+  batchSize: 4
+  trainSplit: 0.8
+
+training:
+  epochs: 2000
+  eval_epochs: 50
+  model:
+    name: simple
+  loss: mse
+  optimizer:
+    name: sgd
+    lr: 0.0001
+    momentum: 0.9
+    weightDecay: 0.00001
+  lrScheduler:
+    name: step
+    stepStepSize: 1000
+    stepGamma: 0.5

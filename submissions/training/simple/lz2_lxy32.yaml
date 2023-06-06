@@ -1,22 +1,22 @@
 writer:
-  logdir: runs/lz1_lxy16
+  logdir: runs/simple/lz1_lxy32
 
 data:
   dataConfigPath: datasets/training_data/data_config.yaml
-  lz: 1
-  lxy: 16
+  lz: 2
+  lxy: 32
   batchSize: 16
   trainSplit: 0.8
 
 training:
-  epochs: 500
-  eval_epochs: 4
+  epochs: 600
+  eval_epochs: 5
   model:
     name: simple
   loss: mse
   optimizer:
     name: sgd
-    lr: 0.001
+    lr: 0.0001
     momentum: 0.9
   lrScheduler:
     name: step

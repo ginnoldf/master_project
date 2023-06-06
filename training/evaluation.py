@@ -33,7 +33,7 @@ def evaluation(writer: Writer,
                 true_std = np.std(true_data, axis=0)
 
                 # draw 5 random samples out of the dataset to compare prediction with truth
-                sample_indices = np.random.randint(low=0, high=len(lxy_dataloader['dataloader'].dataset), size=5)
+                sample_indices = np.random.randint(low=0, high=len(lxy_dataloader['dataloader'].dataset), size=3)
                 sample_evaluation = []
                 for sample_idx in sample_indices:
                     truth = lxy_dataloader['dataloader'].dataset[sample_idx][1].numpy()
