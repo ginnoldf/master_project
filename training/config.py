@@ -39,6 +39,8 @@ def get_model(model: Dict):
         return models.DNN1().double()
     if model['name'] == 'cnn_dnn1':
         return models.CNN_DNN1().double()
+    if model['name'] == 'cnn_dnn2':
+        return models.CNN_DNN2().double()
     else:
         return None
 
@@ -103,8 +105,7 @@ class TrainingConfig:
 
         # load data config
         self.data_config_path = self.config_dict['data']['dataConfigPath']
-        self.lz = self.config_dict['data']['lz']
-        self.lxy = self.config_dict['data']['lxy']
+        self.train_datasets = self.config_dict['data']['trainDatasets']
         self.bsize = self.config_dict['data']['batchSize']
         self.train_split = self.config_dict['data']['trainSplit']
 

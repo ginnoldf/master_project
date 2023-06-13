@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#PBS -N train_dnn1_lz2_lxy16
+#PBS -N dnn1_lz2_lxy16
 #PBS -A uclb0017
 #PBS -l select=1:ncpus=4:mem=16GB
 #PBS -l walltime=08:00:00

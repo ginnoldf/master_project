@@ -1,18 +1,18 @@
 writer:
-  logdir: runs/dnn1/lz2_lxy64
+  logdir: runs/cnn_dnn2/lz2_lxy64
 
 data:
   dataConfigPath: datasets/training_data/data_config.yaml
   lz: 2
   lxy: 64
-  batchSize: 32
+  batchSize: 16
   trainSplit: 0.8
 
 training:
-  epochs: 16000
+  epochs: 12000
   eval_epochs: 200
   model:
-    name: dnn1
+    name: cnn_dnn2
   loss: mse
   optimizer:
     name: adam

@@ -1,6 +1,6 @@
 import torch
-from torch.utils.data import DataLoader, Dataset, ConcatDataset
-from typing import Dict, List
+from torch.utils.data import DataLoader
+from typing import Dict
 
 from training.writer import Writer
 from training.evaluation import evaluation
@@ -40,9 +40,9 @@ def train_one_epoch(
 def train(
         writer: Writer,
         epochs: int,
-        train_dataset: Dataset,
-        bsize: int,
-        eval_dataloaders: List[Dict],
+        train_loader: DataLoader,
+        test_loader: DataLoader,
+        eval_dataloaders: Dict,
         optimizer: torch.optim.Optimizer,
         #lr_scheduler: torch.optim.lr_scheduler.LRScheduler,
         lr_scheduler,
@@ -54,11 +54,11 @@ def train(
         # train
         model.train()
         train_one_epoch(writer=writer,
-                        train_loader=DataLoader(train_dataset, batch_size=bsize, shuffle=True),
+                        train_loader=train_loader,
                         model=model,
                         loss_fn=loss_fn,
                         optimizer=optimizer,
-                        global_steps_start=epoch * len(train_dataset))
+                        global_steps_start=epoch * len(train_loader.dataset))
 
         # lr scheduling
         lr_scheduler.step()
@@ -68,6 +68,7 @@ def train(
             evaluation(writer=writer,
                        epoch=epoch,
                        model=model,
+                       test_loader=test_loader,
                        eval_dataloaders=eval_dataloaders,
                        loss_fn=loss_fn,
-                       global_step=len(train_dataset) * (epoch + 1))
+                       global_step=len(train_loader.dataset) * (epoch + 1))

@@ -1,22 +1,36 @@
-data:
-  lz2:
-    lxy16:
-      sim1601: datasets/training_data/lz2/lxy16/16_01
-      sim1603: datasets/training_data/lz2/lxy16/16_03
-      sim1606: datasets/training_data/lz2/lxy16/16_06
-    lxy32:
-      sim1601: datasets/training_data/lz2/lxy32/16_01
-      sim1603: datasets/training_data/lz2/lxy32/16_03
-      sim1606: datasets/training_data/lz2/lxy32/16_06
-    lxy64:
-      sim1601: datasets/training_data/lz2/lxy64/16_01
-      sim1603: datasets/training_data/lz2/lxy64/16_03
-      sim1606: datasets/training_data/lz2/lxy64/16_06
-    lxy128:
-      sim1601: datasets/training_data/lz2/lxy128/16_01
-      sim1603: datasets/training_data/lz2/lxy128/16_03
-      sim1606: datasets/training_data/lz2/lxy128/16_06
-    lxy256:
-      sim1601: datasets/training_data/lz2/lxy256/16_01
-      sim1603: datasets/training_data/lz2/lxy256/16_03
-      sim1606: datasets/training_data/lz2/lxy256/16_06
+datasets:
+  - name: lz2_lxy16
+    lz: 2
+    lxy: 16
+    directories:
+      - datasets/training_data/lz2/lxy16/16_01
+      - datasets/training_data/lz2/lxy16/16_03
+      - datasets/training_data/lz2/lxy16/16_06
+  - name: lz2_lxy32
+    lz: 2
+    lxy: 32
+    directories:
+      - datasets/training_data/lz2/lxy32/16_01
+      - datasets/training_data/lz2/lxy32/16_03
+      - datasets/training_data/lz2/lxy32/16_06
+  - name: lz2_lxy64
+    lz: 2
+    lxy: 64
+    directories:
+      - datasets/training_data/lz2/lxy64/16_01
+      - datasets/training_data/lz2/lxy64/16_03
+      - datasets/training_data/lz2/lxy64/16_06
+  - name: lz2_lxy128
+    lz: 2
+    lxy: 128
+    directories:
+      - datasets/training_data/lz2/lxy128/16_01
+      - datasets/training_data/lz2/lxy128/16_03
+      - datasets/training_data/lz2/lxy128/16_06
+  - name: lz2_lxy256
+    lz: 2
+    lxy: 256
+    directories:
+      - datasets/training_data/lz2/lxy256/16_01
+      - datasets/training_data/lz2/lxy256/16_03
+      - datasets/training_data/lz2/lxy256/16_06

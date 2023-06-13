@@ -5,11 +5,11 @@ data:
   dataConfigPath: datasets/training_data/data_config.yaml
   lz: 2
   lxy: 256
-  batchSize: 8
+  batchSize: 16
   trainSplit: 0.8
 
 training:
-  epochs: 10000
+  epochs: 20000
   eval_epochs: 100
   model:
     name: dnn1
@@ -20,5 +20,5 @@ training:
     betas: 0.9, 0.999
   lrScheduler:
     name: step
-    stepStepSize: 2000
+    stepStepSize: 5000
     stepGamma: 0.5

@@ -1,20 +1,19 @@
-import string
 import yaml
-from typing import Dict
 import numpy as np
 import os
+from typing import List
 
 import torch
-from torch.utils.data import TensorDataset, DataLoader, random_split
+from torch.utils.data import TensorDataset, DataLoader, random_split, ConcatDataset
 
 from training.config import TrainingConfig
 
 
 # load data config to read file paths from
-def load_data_config(data_config_path: string):
+def load_datasets_config(data_config_path: str):
     with open(data_config_path, 'r') as file:
         data_config = yaml.safe_load(file)
-    return data_config['data']
+    return data_config['datasets']
 
 
 def data_reshape(np_array: np.ndarray):
@@ -28,14 +27,14 @@ def data_reshape(np_array: np.ndarray):
     return training_samples
 
 
-def load_data(data_config: Dict, lz_key: string, lxy_key: string):
+def load_data(directories: List[str]):
     theta_np_arrays, tkes_np_arrays, turb_heat_flux_np_arrays = [], [], []
 
     # load all numpy arrays
-    for sim in data_config[lz_key][lxy_key]:
-        theta_path = os.path.join(data_config[lz_key][lxy_key][sim], 'theta.npy')
-        tkes_path = os.path.join(data_config[lz_key][lxy_key][sim], 'tkes.npy')
-        turb_heat_flux_path = os.path.join(data_config[lz_key][lxy_key][sim], 'turb_heat_flux.npy')
+    for directory in directories:
+        theta_path = os.path.join(directory, 'theta.npy')
+        tkes_path = os.path.join(directory, 'tkes.npy')
+        turb_heat_flux_path = os.path.join(directory, 'turb_heat_flux.npy')
         theta_np_arrays.append(data_reshape(np.load(theta_path)))
         tkes_np_arrays.append(data_reshape(np.load(tkes_path)))
         turb_heat_flux_np_arrays.append(data_reshape(np.load(turb_heat_flux_path)))
@@ -48,37 +47,34 @@ def load_data(data_config: Dict, lz_key: string, lxy_key: string):
     return theta, tke, turb_heat_flux
 
 
-def get_data_loaders(config: TrainingConfig):
+def get_datasets(config: TrainingConfig):
     # read data from disk to numpy arrays
-    data_config = load_data_config(config.data_config_path)
+    datasets_config = load_datasets_config(config.data_config_path)
 
     # load all datasets that are described in the data config file
-    all_dataloaders = {}
-    train_loader, test_loader = (None, None)
-    for lz_key in data_config:
-        all_dataloaders[lz_key] = []
-        for lxy_key in data_config[lz_key]:
-            # load data
-            theta, tkes, turb_heat_flux = load_data(data_config=data_config, lz_key=lz_key, lxy_key=lxy_key)
+    eval_dataloaders = []
+    train_datasets = []
+    for dataset_config in datasets_config:
+        # load data
+        theta, tkes, turb_heat_flux = load_data(directories=dataset_config['directories'])
 
-            # create structured input data
-            in_np = np.stack((theta, tkes), axis=1)
+        # create structured input data
+        in_np = np.stack((theta, tkes), axis=1)
 
-            # create torch train and test datasets from numpy arrays
-            dataset_size = theta.shape[0]
-            dataset = TensorDataset(torch.from_numpy(in_np), torch.from_numpy(turb_heat_flux))
+        # create torch train and test datasets from numpy arrays
+        dataset_size = theta.shape[0]
+        dataset = TensorDataset(torch.from_numpy(in_np), torch.from_numpy(turb_heat_flux))
 
-            # the set that we use to train, needs to be split into a train and a test set
-            if lz_key == 'lz' + str(config.lz) and lxy_key == 'lxy' + str(config.lxy):
-                train_size = round(dataset_size * config.train_split)
-                test_size = dataset_size - train_size
-                training_set, test_set = random_split(dataset, [train_size, test_size])
+        # do a train test split on the dataset if we want to train on it
+        if dataset_config['name'] in config.train_datasets:
+            train_size = round(dataset_size * config.train_split)
+            test_size = dataset_size - train_size
+            train_set, test_set = random_split(dataset, [train_size, test_size])
+            train_datasets.append(train_set)
+            eval_dataloaders.append({'dataset_name': dataset_config['name'],
+                                     'dataloader': DataLoader(test_set, batch_size=len(test_set), shuffle=False)})
+        else:
+            eval_dataloaders.append({'dataset_name': dataset_config['name'],
+                                     'dataloader': DataLoader(dataset, len(dataset), shuffle=False)})
 
-                # create torch dataloader from datasets
-                train_loader = DataLoader(training_set, batch_size=config.bsize, shuffle=True)
-                test_loader = DataLoader(test_set, batch_size=32, shuffle=False)
-
-            all_dataloaders[lz_key].append({'lxy_key': lxy_key,
-                                            'dataloader': DataLoader(dataset, batch_size=32, shuffle=False)})
-
-    return train_loader, test_loader, all_dataloaders
+    return ConcatDataset(train_datasets), eval_dataloaders

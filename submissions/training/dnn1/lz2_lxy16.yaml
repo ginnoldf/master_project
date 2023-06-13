@@ -9,8 +9,8 @@ data:
   trainSplit: 0.8
 
 training:
-  epochs: 2000
-  eval_epochs: 50
+  epochs: 4000
+  eval_epochs: 100
   model:
     name: dnn1
   loss: mse
@@ -20,5 +20,5 @@ training:
     betas: 0.9, 0.999
   lrScheduler:
     name: step
-    stepStepSize: 500
+    stepStepSize: 1000
     stepGamma: 0.5

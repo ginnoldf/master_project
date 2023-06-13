@@ -11,17 +11,17 @@ def main():
     # create writer
     writer = Writer(config.logdir)
 
-    # load data and structure it to train and test loader
-    train_loader, test_loader, all_dataloaders = data.get_data_loaders(config=config)
+    # load data and structure it to train, test and eval datasets
+    train_dataset, eval_dataloaders = data.get_datasets(config=config)
 
     # training
     train.train(
         writer=writer,
         epochs=config.epochs,
         eval_epochs=config.eval_epochs,
-        train_loader=train_loader,
-        test_loader=test_loader,
-        all_dataloaders=all_dataloaders,
+        train_dataset=train_dataset,
+        bsize=config.bsize,
+        eval_dataloaders=eval_dataloaders,
         optimizer=config.optimizer,
         lr_scheduler=config.lr_scheduler,
         model=config.model,

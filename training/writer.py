@@ -20,10 +20,7 @@ class Writer:
     def epoch(self, global_step, avg_loss):
         self.tb_writer.add_scalar('avg loss over epoch', scalar_value=avg_loss, global_step=global_step)
 
-    def evaluation(self, global_step, epoch, avg_test_loss, all_datasets_evaluation):
-        self.tb_writer.add_scalar('evaluation loss per sample', scalar_value=avg_test_loss, global_step=global_step)
-        print('Epoch: ' + str(epoch) + ', Evaluation loss per sample: ' + str(avg_test_loss))
-
+    def evaluation(self, global_step, epoch, all_datasets_evaluation):
         for dataset_evaluation in all_datasets_evaluation:
             self.tb_writer.add_scalar(dataset_evaluation['dataset'],
                                       scalar_value=dataset_evaluation['avg_loss'],

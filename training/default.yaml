@@ -3,8 +3,8 @@ writer:
 
 data:
   dataConfigPath: datasets/training_data/data_config.yaml
-  lz: 2
-  lxy: 256
+  trainDatasets:
+    - lz2_lxy256
   batchSize: 4
   trainSplit: 0.8
 
