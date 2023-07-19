@@ -1,32 +1,65 @@
+import torch
+
 from training.config import TrainingConfig
 from training.writer import Writer
 import training.data as data
 import training.train as train
+import training.train_maml as train_maml
 
 
 def main():
+    # set seed for reproducability - especially for train and test splits
+    torch.manual_seed(0)
+
     # load training configuration
     config = TrainingConfig()
 
     # create writer
     writer = Writer(config.logdir)
 
-    # load data and structure it to train, test and eval datasets
-    train_dataset, eval_dataloaders = data.get_datasets(config=config)
+    # normal optimizer run
+    if config.run == 'optimizer':
+        # load data and structure it to train, test and eval datasets
+        train_dataset, eval_dataloaders = data.get_data(config=config)
 
-    # training
-    train.train(
-        writer=writer,
-        epochs=config.epochs,
-        eval_epochs=config.eval_epochs,
-        train_dataset=train_dataset,
-        bsize=config.bsize,
-        eval_dataloaders=eval_dataloaders,
-        optimizer=config.optimizer,
-        lr_scheduler=config.lr_scheduler,
-        model=config.model,
-        loss_fn=config.loss_fn
-    )
+        # training
+        train.train(
+            device=config.device,
+            writer=writer,
+            epochs=config.epochs,
+            eval_epochs=config.eval_epochs,
+            train_dataset=train_dataset,
+            bsize=config.bsize,
+            eval_dataloaders=eval_dataloaders,
+            optimizer=config.optimizer,
+            lr_scheduler=config.lr_scheduler,
+            model=config.model,
+            loss_fn=config.loss_fn
+        )
+
+    # maml run
+    if config.run == 'maml':
+        # load data and structure it to train, test and eval datasets for base and target
+        train_dataset_base, train_dataset_target, test_dataset_base, test_dataset_target, eval_dataloaders = data.get_data_maml(config)
+
+        # training
+        train_maml.train(
+            device=config.device,
+            writer=writer,
+            epochs=config.epochs,
+            eval_epochs=config.eval_epochs,
+            train_dataset_base=train_dataset_base,
+            train_dataset_target=train_dataset_target,
+            test_dataset_base=test_dataset_base,
+            test_dataset_target=test_dataset_target,
+            bsize_base=config.bsize_base,
+            eval_dataloaders=eval_dataloaders,
+            optimizer=config.optimizer,
+            lr_scheduler=config.lr_scheduler,
+            model=config.model,
+            lr_maml=config.lr_maml,
+            loss_fn=config.loss_fn
+        )
 
     writer.end(config=config)
 

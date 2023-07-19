@@ -32,17 +32,28 @@ def update(default: Mapping, update_values: Mapping):
     return result
 
 
-def get_model(model: Dict):
-    if model['name'] == 'simple':
-        return models.SimpleModel().double()
-    if model['name'] == 'dnn1':
-        return models.DNN1().double()
-    if model['name'] == 'cnn_dnn1':
-        return models.CNN_DNN1().double()
-    if model['name'] == 'cnn_dnn2':
-        return models.CNN_DNN2().double()
-    else:
-        return None
+def get_model(model_dict: Dict):
+    model = None
+    if model_dict['name'] == 'simple':
+        model = models.SimpleModel().double()
+    if model_dict['name'] == 'dnn1':
+        model = models.DNN1().double()
+    if model_dict['name'] == 'cnn_dnn1':
+        model = models.CNN_DNN1().double()
+    if model_dict['name'] == 'cnn_dnn2':
+        model = models.CNN_DNN2().double()
+
+    # load model if specified
+    if 'stateDictPath' in model_dict.keys() and not model_dict['stateDictPath'] is None:
+        model.load_state_dict(torch.load(model_dict['stateDictPath']))
+
+    # freeze model children
+    for i, child in enumerate(model.children()):
+        if 'freezeChildren' in model_dict.keys() and not model_dict['freezeChildren'] is None and i in model_dict['freezeChildren']:
+            for param in child.parameters():
+                param.requires_grad = False
+
+    return model
 
 
 def get_loss_fn(loss_name: string):
@@ -72,6 +83,12 @@ def get_lr_scheduler(lr_scheduler: Dict, optimizer: torch.optim.Optimizer):
         return torch.optim.lr_scheduler.StepLR(optimizer=optimizer,
                                                step_size=lr_scheduler['stepStepSize'],
                                                gamma=lr_scheduler['stepGamma'])
+    elif lr_scheduler['name'] == 'cosineAnnealingWarmRestarts':
+        return torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer=optimizer,
+                                                                    T_0=lr_scheduler['T0'],
+                                                                    T_mult=lr_scheduler['TMult'],
+                                                                    eta_min=lr_scheduler['etaMin'],
+                                                                    last_epoch=lr_scheduler['lastEpoch'])
     else:
         return None
 
@@ -98,15 +115,21 @@ class TrainingConfig:
 
         # load device
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        if torch.cuda.is_available():
-            print("cuda")
-        else:
-            print("cpu")
+
+        # decide between maml and a normal optimizer run
+        self.run = self.config_dict['run']
+        if self.run == 'maml':
+            self.bsize_base = self.config_dict['data']['batchSizeBase']
+            self.base_datasets = self.config_dict['data']['baseDatasets']
+            self.target_datasets = self.config_dict['data']['targetDatasets']
+            self.lr_maml = self.config_dict['training']['mamlLR']
+
+        if self.run == 'optimizer':
+            self.train_datasets = self.config_dict['data']['trainDatasets']
+            self.bsize = self.config_dict['data']['batchSize']
 
         # load data config
         self.data_config_path = self.config_dict['data']['dataConfigPath']
-        self.train_datasets = self.config_dict['data']['trainDatasets']
-        self.bsize = self.config_dict['data']['batchSize']
         self.train_split = self.config_dict['data']['trainSplit']
 
         self.epochs = self.config_dict['training']['epochs']

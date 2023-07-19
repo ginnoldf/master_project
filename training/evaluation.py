@@ -1,12 +1,13 @@
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Dataset
 from typing import Dict, List
 
 from training.writer import Writer
 
 
-def evaluation(writer: Writer,
+def evaluation(device: torch.device,
+               writer: Writer,
                epoch: int,
                model: torch.nn.Module,
                eval_dataloaders: List[Dict],
@@ -20,7 +21,8 @@ def evaluation(writer: Writer,
         for eval_dataloader in eval_dataloaders:
             # get avg loss for all datasets
             dataloader = eval_dataloader['dataloader']
-            avg_loss, pred_mean = evaluate_dataset(dataloader=dataloader,
+            avg_loss, pred_mean = evaluate_dataset(device=device,
+                                                   dataloader=dataloader,
                                                    model=model,
                                                    loss_fn=loss_fn)
 
@@ -34,7 +36,7 @@ def evaluation(writer: Writer,
             sample_evaluation = []
             for sample_idx in sample_indices:
                 truth = dataloader.dataset[sample_idx][1].numpy()
-                pred = model(dataloader.dataset[sample_idx][0]).numpy()
+                pred = model(dataloader.dataset[sample_idx][0].to(device)).cpu().numpy()
                 sample_evaluation.append({'truth': truth, 'pred': pred})
 
             all_datasets_evaluation.append({'dataset': eval_dataloader['dataset_name'],
@@ -49,17 +51,20 @@ def evaluation(writer: Writer,
                       all_datasets_evaluation=all_datasets_evaluation)
 
 
-def evaluate_dataset(model: torch.nn.Module, dataloader: DataLoader, loss_fn):
-    running_test_loss = 0.0
-    running_pred_mean = np.zeros(len(dataloader.dataset[0][1]))
-    for i, test_batch in enumerate(dataloader):
-        test_inputs, test_outputs_true = test_batch
-        test_outputs_model = model(test_inputs.double())
-        test_loss = loss_fn(test_outputs_model, test_outputs_true)
-        running_test_loss += test_loss
+def evaluate_dataset(device: torch.device, model: torch.nn.Module, dataloader: DataLoader, loss_fn):
+    with torch.no_grad():
+        running_test_loss = 0.0
+        running_pred_mean = np.zeros(len(dataloader.dataset[0][1]))
+        for i, test_batch in enumerate(dataloader):
+            test_inputs, test_outputs_true = test_batch
+            test_outputs_model = model(test_inputs.double().to(device))
+            test_loss = loss_fn(test_outputs_model.to(device), test_outputs_true.to(device))
+            running_test_loss += test_loss
 
-        # add up mean of predictions
-        running_pred_mean += np.sum(test_outputs_model.numpy(), axis=0)
-    avg_loss = running_test_loss.item() / len(dataloader.dataset)
-    pred_mean = running_pred_mean / len(dataloader.dataset)
+            # add up mean of predictions
+            running_pred_mean += np.sum(test_outputs_model.cpu().numpy(), axis=0)
+
+        avg_loss = running_test_loss.item() / (i + 1)
+        pred_mean = running_pred_mean / len(dataloader.dataset)
     return avg_loss, pred_mean
+

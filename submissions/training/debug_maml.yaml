@@ -1,0 +1,33 @@
+writer:
+  logdir: runs/debug_maml
+
+run: maml
+
+data:
+  dataConfigPath: datasets/training_data/data_config.yaml
+  baseDatasets:
+    - lz2_lxy128
+  targetDatasets:
+    - lz2_lxy256
+  batchSizeBase: 64
+  trainSplit: 0.8
+
+training:
+  epochs: 30
+  eval_epochs: 10
+  model:
+    name: cnn_dnn2
+    stateDictPath:
+    freezeChildren:
+  loss: mse
+  mamlLR: 0.001
+  optimizer:
+    name: adam
+    lr: 0.001
+    betas: 0.9, 0.999
+  lrScheduler:
+    name: cosineAnnealingWarmRestarts
+    T0: 10
+    TMult: 2
+    etaMin: 0
+    lastEpoch: -1

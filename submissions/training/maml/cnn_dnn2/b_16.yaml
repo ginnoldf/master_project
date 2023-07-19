@@ -1,0 +1,33 @@
+writer:
+  logdir: runs/maml/cnn_dnn2/b_16
+
+run: maml
+
+data:
+  dataConfigPath: datasets/training_data/data_config.yaml
+  baseDatasets:
+    - lz2_lxy16
+  targetDatasets:
+    - lz2_lxy32
+    - lz2_lxy64
+    - lz2_lxy128
+    - lz2_lxy256
+  batchSizeBase: 32
+  batchSizeTarget: 32
+  trainSplit: 0.8
+
+training:
+  epochs: 10000
+  eval_epochs: 200
+  model:
+    name: cnn_dnn2
+  loss: mse
+  mamlLR: 0.001
+  optimizer:
+    name: adam
+    lr: 0.001
+    betas: 0.9, 0.999
+  lrScheduler:
+    name: step
+    stepStepSize: 2000
+    stepGamma: 0.5

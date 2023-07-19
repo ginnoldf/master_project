@@ -13,9 +13,17 @@ class Writer:
         self.logdir = logdir
         self.tb_writer = SummaryWriter(logdir=logdir)
 
-    def step(self, global_step, lr, loss_per_sample):
-        self.tb_writer.add_scalar('learning rate', scalar_value=lr, global_step=global_step)
-        self.tb_writer.add_scalar('loss per train sample', scalar_value=loss_per_sample, global_step=global_step)
+    def step(self, global_step, lr, loss_per_batch):
+        #self.tb_writer.add_scalar('learning rate', scalar_value=lr, global_step=global_step)
+        #self.tb_writer.add_scalar('loss per train batch', scalar_value=loss_per_batch, global_step=global_step)
+        return
+
+    def step_maml(self, global_step, lr_opt, loss_inner, loss_outer, test_loss_outer, test_loss_inner):
+        #self.tb_writer.add_scalar('learning rate', scalar_value=lr_opt, global_step=global_step)
+        self.tb_writer.add_scalar('train loss inner loop', scalar_value=loss_inner, global_step=global_step)
+        self.tb_writer.add_scalar('train loss outer loop', scalar_value=loss_outer, global_step=global_step)
+        #self.tb_writer.add_scalar('test loss outer loop', scalar_value=test_loss_outer, global_step=global_step)
+        #self.tb_writer.add_scalar('test loss inner loop', scalar_value=test_loss_inner, global_step=global_step)
 
     def epoch(self, global_step, avg_loss):
         self.tb_writer.add_scalar('avg loss over epoch', scalar_value=avg_loss, global_step=global_step)

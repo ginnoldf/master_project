@@ -28,4 +28,21 @@ Todos:
 - plotting correct way
 - improve baseline (DNN, overfit, perhaps CNN) -> visually good results 
 - we use MAML (Juan knows)
-- larger datasets
+
+### Meeting 07/03/2023
+
+- baseline should be good now -> results are visually good
+- maml implementation is done - it works for smaller datasets
+  - it is not better than training with all datasets
+  - I do not get the hyperparameters right
+- leave out is interesting
+
+Todos:
+- meeting with Juan to discuss maml setup
+- different kind of data - start with Laure?
+- prepare meeting with Prof. Schär for next time
+- transfer learning approach, just unfreeze one layer at the end or the first 2 cnn layers
+
+### Meeting 07/20/2023
+
+

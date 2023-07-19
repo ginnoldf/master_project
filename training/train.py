@@ -7,6 +7,7 @@ from training.evaluation import evaluation
 
 
 def train_one_epoch(
+        device: torch.device,
         writer: Writer,
         train_loader: DataLoader,
         optimizer: torch.optim.Optimizer,
@@ -21,23 +22,24 @@ def train_one_epoch(
         # zero your gradients for every batch
         optimizer.zero_grad()
 
-        # Make predictions for this batch
-        outputs_model = model(inputs.double())
+        # make predictions for this batch
+        outputs_model = model(inputs.double().to(device))
 
-        # Compute the loss and its gradients
-        loss = loss_fn(outputs_model, outputs_true)
+        # compute the loss and its gradients
+        loss = loss_fn(outputs_model.to(device), outputs_true.to(device))
         loss.backward()
 
         # actual learning step
         optimizer.step()
 
-        # Gather data and report
+        # gather data and report
         writer.step(global_step=global_steps_start + (i + 1) * train_loader.batch_size,
                     lr=optimizer.state_dict()['param_groups'][0]['lr'],
-                    loss_per_sample=loss.item())
+                    loss_per_batch=loss.item())
 
 
 def train(
+        device: torch.device,
         writer: Writer,
         epochs: int,
         train_dataset: Dataset,
@@ -50,10 +52,12 @@ def train(
         loss_fn,
         eval_epochs: int
 ):
+
     for epoch in range(epochs):
         # train
         model.train()
-        train_one_epoch(writer=writer,
+        train_one_epoch(device=device,
+                        writer=writer,
                         train_loader=DataLoader(train_dataset, batch_size=bsize, shuffle=True),
                         model=model,
                         loss_fn=loss_fn,
@@ -65,7 +69,8 @@ def train(
 
         # test model
         if epoch % eval_epochs == 0:
-            evaluation(writer=writer,
+            evaluation(device=device,
+                       writer=writer,
                        epoch=epoch,
                        model=model,
                        eval_dataloaders=eval_dataloaders,

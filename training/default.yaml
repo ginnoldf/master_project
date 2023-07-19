@@ -8,6 +8,8 @@ data:
   batchSize: 4
   trainSplit: 0.8
 
+run: optimizer
+
 training:
   epochs: 2000
   eval_epochs: 50
