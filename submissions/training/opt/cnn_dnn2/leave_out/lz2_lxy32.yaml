@@ -1,6 +1,8 @@
 writer:
   logdir: runs/cnn_dnn2/leave_out/lz2_lxy32
 
+run: optimizer
+
 data:
   dataConfigPath: datasets/training_data/data_config.yaml
   trainDatasets:
@@ -9,7 +11,6 @@ data:
     - lz2_lxy64
     - lz2_lxy16
   batchSize: 128
-  trainSplit: 0.8
 
 training:
   epochs: 5000

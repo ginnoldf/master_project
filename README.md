@@ -45,4 +45,19 @@ Todos:
 
 ### Meeting 07/20/2023
 
+- maml: only remaining problem is MSE for the base dataset
+- transfer learning: a little worse, as expected
+- experiments take long and finetuning is frustrating
+- what should be my priorities in the next 2.5 months, what outcome is expected (good reusable, commented and in
+  README.md files explained code, easily reproducable results, many prepared experiments or just the main ones, 
+  collection of important tables/graphs, presentation for the group, thesis paper)
 
+notes:
+- latent space in MAML
+- paper on transfer learning approach
+- https://arxiv.org/pdf/1703.03400.pdf
+- https://academic.oup.com/pnasnexus/article-abstract/2/3/pgad015/6998042
+- https://www.sciencedirect.com/science/article/pii/S0021999122001528?casa_token=qSelgmHslhoAAAAA:blCti2x6d1pO2-INndWD7joeaAOuGz33nvwJwW3HsLyB59gGGedDCB8LZlRmv9epBe70im6Pqg
+- meeting with Christoph
+- meeting with Laure
+- evaluate the same samples for all evaluations (about 10)

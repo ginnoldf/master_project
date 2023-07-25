@@ -13,4 +13,4 @@ conda activate training_cuda
 export PYTHONPATH=/glade/u/home/fginnold/master_project
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/glade/work/fginnold/conda-envs/training_cuda/lib
 
-python3 training/main.py --config-file=submissions/training/opt/cnn_dnn2/lz2_lxy256.yaml
+python3 training/main.py --config-file=submissions/training/opt/cnn_dnn2/cosine_annealing/lz2_lxy256.yaml

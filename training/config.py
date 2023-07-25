@@ -130,7 +130,6 @@ class TrainingConfig:
 
         # load data config
         self.data_config_path = self.config_dict['data']['dataConfigPath']
-        self.train_split = self.config_dict['data']['trainSplit']
 
         self.epochs = self.config_dict['training']['epochs']
         self.eval_epochs = self.config_dict['training']['eval_epochs']

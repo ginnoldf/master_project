@@ -13,7 +13,6 @@ data:
     - lz2_lxy128
     - lz2_lxy256
   batchSizeBase: 256
-  trainSplit: 0.8
 
 training:
   epochs: 20000

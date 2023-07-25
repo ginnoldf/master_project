@@ -4,11 +4,10 @@ writer:
 run: optimizer
 
 data:
-  dataConfigPath: datasets/training_data/data_config.yaml
+  dataConfigPath: datasets/data_config.yaml
   trainDatasets:
     - lz2_lxy256
   batchSize: 64
-  trainSplit: 0.8
 
 training:
   epochs: 30

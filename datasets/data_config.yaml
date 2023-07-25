@@ -1,0 +1,36 @@
+datasets:
+  - name: lz2_lxy16
+    lz: 2
+    lxy: 16
+    directories:
+      - datasets/lz2/lxy16/16_01
+      - datasets/lz2/lxy16/16_03
+      - datasets/lz2/lxy16/16_06
+  - name: lz2_lxy32
+    lz: 2
+    lxy: 32
+    directories:
+      - datasets/lz2/lxy32/16_01
+      - datasets/lz2/lxy32/16_03
+      - datasets/lz2/lxy32/16_06
+  - name: lz2_lxy64
+    lz: 2
+    lxy: 64
+    directories:
+      - datasets/lz2/lxy64/16_01
+      - datasets/lz2/lxy64/16_03
+      - datasets/lz2/lxy64/16_06
+  - name: lz2_lxy128
+    lz: 2
+    lxy: 128
+    directories:
+      - datasets/lz2/lxy128/16_01
+      - datasets/lz2/lxy128/16_03
+      - datasets/lz2/lxy128/16_06
+  - name: lz2_lxy256
+    lz: 2
+    lxy: 256
+    directories:
+      - datasets/lz2/lxy256/16_01
+      - datasets/lz2/lxy256/16_03
+      - datasets/lz2/lxy256/16_06

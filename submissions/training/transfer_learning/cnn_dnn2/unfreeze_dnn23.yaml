@@ -12,7 +12,6 @@ data:
     - lz2_lxy32
     - lz2_lxy16
   batchSize: 128
-  trainSplit: 0.8
 
 training:
   epochs: 10000

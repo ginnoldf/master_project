@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #PBS -N unfreeze_dnn23
 #PBS -A uclb0017
-#PBS -l select=1:ncpus=4:mem=16GB
+#PBS -l select=1:ncpus=4:mem=16GB:ngpus=1
 #PBS -l walltime=24:00:00
 #PBS -q casper
 #PBS -j oe

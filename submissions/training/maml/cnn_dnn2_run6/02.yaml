@@ -1,5 +1,5 @@
 writer:
-  logdir: runs/maml/cnn_dnn2_run6/01
+  logdir: runs/maml/cnn_dnn2_run6/02
 
 run: maml
 
@@ -13,14 +13,13 @@ data:
     - lz2_lxy64
     - lz2_lxy128
   batchSizeBase: 8
-  trainSplit: 0.8
 
 training:
-  epochs: 20000
+  epochs: 12000
   eval_epochs: 50
   model:
     name: cnn_dnn2
-    stateDictPath: runs/cnn_dnn2/cosine_annealing/lz2_lxy16/model.pt
+    stateDictPath: runs/cnn_dnn2/cosine_annealing/lz2_lxy256/model.pt
   loss: mse
   mamlLR: 0.00001
   optimizer:

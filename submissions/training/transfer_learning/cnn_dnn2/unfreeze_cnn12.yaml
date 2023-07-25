@@ -12,11 +12,10 @@ data:
     - lz2_lxy32
     - lz2_lxy16
   batchSize: 128
-  trainSplit: 0.8
 
 training:
   epochs: 10000
-  eval_epochs: 20
+  eval_epochs: 100
   model:
     name: cnn_dnn2
     stateDictPath: runs/cnn_dnn2/cosine_annealing/lz2_lxy16/model.pt

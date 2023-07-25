@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader, Dataset, ConcatDataset
 from typing import Dict, List
 
 from training.writer import Writer
@@ -27,7 +27,14 @@ def evaluation(device: torch.device,
                                                    loss_fn=loss_fn)
 
             # get true turbulent heat flux distribution
-            true_data = dataloader.dataset[:][1].numpy()
+            # special case of ConcatDatasets must be handled slightly differently
+            if isinstance(dataloader.dataset, ConcatDataset):
+                thf_array = []
+                for dataset in dataloader.dataset.datasets:
+                    thf_array.append(dataset.tensors[1].numpy())
+                true_data = np.concatenate(thf_array, axis=0)
+            else:
+                true_data = dataloader.dataset[:][1].numpy()
             true_mean = np.mean(true_data, axis=0)
             true_std = np.std(true_data, axis=0)
 

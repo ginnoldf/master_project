@@ -1,12 +1,13 @@
 writer:
   logdir: runs/cnn_dnn2/step_lr/lz2_lxy64
 
+run: optimizer
+
 data:
-  dataConfigPath: datasets/training_data/data_config.yaml
+  dataConfigPath: datasets/data_config.yaml
   trainDatasets:
     - lz2_lxy64
   batchSize: 16
-  trainSplit: 0.8
 
 training:
   epochs: 12000
