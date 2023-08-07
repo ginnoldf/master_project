@@ -17,7 +17,7 @@ def build_argparser() -> argparse.ArgumentParser:
         "--config-file",
         type=pathlib.Path,
         default="runs/default.yaml",
-        help="path to the file describing the data locations"
+        help="path to the file describing the run"
     )
     return parser
 
