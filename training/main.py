@@ -40,7 +40,7 @@ def main():
     # maml run
     if config.run == 'maml':
         # load data and structure it to train, test and eval datasets for base and target
-        train_dataset_base, train_dataset_target, test_dataset_base, test_dataset_target, eval_dataloaders = data.get_data_maml(config)
+        train_datasets_base, train_datasets_target, test_dataset_base, test_dataset_target, eval_dataloaders = data.get_data_maml(config)
 
         # training
         train_maml.train(
@@ -48,8 +48,9 @@ def main():
             writer=writer,
             epochs=config.epochs,
             eval_epochs=config.eval_epochs,
-            train_dataset_base=train_dataset_base,
-            train_dataset_target=train_dataset_target,
+            maml_k=config.maml_k,
+            train_datasets_base=train_datasets_base,
+            train_datasets_target=train_datasets_target,
             test_dataset_base=test_dataset_base,
             test_dataset_target=test_dataset_target,
             bsize_base=config.bsize_base,

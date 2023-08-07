@@ -126,8 +126,8 @@ def get_data_maml(config: TrainingConfig):
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
                                      'dataloader': DataLoader(dataset_all, batch_size=len(dataset_all), shuffle=False)})
 
-    return ConcatDataset(train_datasets_base), \
-        ConcatDataset(train_datasets_target), \
+    return train_datasets_base, \
+        train_datasets_target, \
         ConcatDataset(test_datasets_base), \
         ConcatDataset(test_datasets_target), \
         eval_dataloaders

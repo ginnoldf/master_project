@@ -10,6 +10,7 @@ data:
     - lz2_lxy128
   targetDatasets:
     - lz2_lxy256
+  mamlK: 256
   batchSizeBase: 64
 
 training:

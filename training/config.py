@@ -119,6 +119,7 @@ class TrainingConfig:
         # decide between maml and a normal optimizer run
         self.run = self.config_dict['run']
         if self.run == 'maml':
+            self.maml_k = self.config_dict['data']['mamlK']
             self.bsize_base = self.config_dict['data']['batchSizeBase']
             self.base_datasets = self.config_dict['data']['baseDatasets']
             self.target_datasets = self.config_dict['data']['targetDatasets']
