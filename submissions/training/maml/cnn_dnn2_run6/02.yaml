@@ -1,10 +1,10 @@
 writer:
-  logdir: runs/maml/cnn_dnn2_run6/02
+  logdir: runs/maml/from_pretrained/lz2_lxy16/01
 
 run: maml
 
 data:
-  dataConfigPath: datasets/training_data/data_config.yaml
+  dataConfigPath: datasets/data_config.yaml
   baseDatasets:
     - lz2_lxy256
   targetDatasets:

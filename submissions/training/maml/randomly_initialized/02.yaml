@@ -1,5 +1,5 @@
 writer:
-  logdir: runs/maml/cnn_dnn2_run6/01
+  logdir: runs/maml/randomly_initialized/02
 
 run: maml
 
@@ -7,26 +7,30 @@ data:
   dataConfigPath: datasets/data_config.yaml
   baseDatasets:
     - lz2_lxy16
-  targetDatasets:
     - lz2_lxy32
     - lz2_lxy64
     - lz2_lxy128
     - lz2_lxy256
-  batchSizeBase: 256
+  targetDatasets:
+    - lz2_lxy16
+    - lz2_lxy32
+    - lz2_lxy64
+    - lz2_lxy128
+    - lz2_lxy256
+  batchSizeBase: 512
 
 training:
-  epochs: 20000
-  eval_epochs: 50
+  epochs: 25000
+  eval_epochs: 100
   model:
     name: cnn_dnn2
-    stateDictPath: runs/cnn_dnn2/cosine_annealing/lz2_lxy16/model.pt
   loss: mse
-  mamlLR: 0.00001
+  mamlLR: 0.000001
   optimizer:
     name: adam
-    lr: 0.001
+    lr: 0.01
     betas: 0.9, 0.999
   lrScheduler:
     name: step
-    stepStepSize: 2000
+    stepStepSize: 5000
     stepGamma: 0.5

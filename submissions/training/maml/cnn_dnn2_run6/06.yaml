@@ -1,5 +1,5 @@
 writer:
-  logdir: runs/maml/cnn_dnn2_run6/01
+  logdir: runs/maml/cnn_dnn2_run6/06
 
 run: maml
 
@@ -7,7 +7,12 @@ data:
   dataConfigPath: datasets/data_config.yaml
   baseDatasets:
     - lz2_lxy16
+    - lz2_lxy32
+    - lz2_lxy64
+    - lz2_lxy128
+    - lz2_lxy256
   targetDatasets:
+    - lz2_lxy16
     - lz2_lxy32
     - lz2_lxy64
     - lz2_lxy128
@@ -21,7 +26,7 @@ training:
     name: cnn_dnn2
     stateDictPath: runs/cnn_dnn2/cosine_annealing/lz2_lxy16/model.pt
   loss: mse
-  mamlLR: 0.00001
+  mamlLR: 0.0001
   optimizer:
     name: adam
     lr: 0.001

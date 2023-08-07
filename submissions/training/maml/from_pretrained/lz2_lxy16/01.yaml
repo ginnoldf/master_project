@@ -1,5 +1,5 @@
 writer:
-  logdir: runs/maml/cnn_dnn2_run6/01
+  logdir: runs/maml/from_pretrained/lz2_lxy16/01
 
 run: maml
 
