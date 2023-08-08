@@ -14,6 +14,7 @@ data:
     - lz2_lxy128
     - lz2_lxy256
   batchSizeBase: 8
+  mamlK: 99999999999
 
 training:
   epochs: 12000

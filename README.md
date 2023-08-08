@@ -60,4 +60,4 @@ notes:
 - https://www.sciencedirect.com/science/article/pii/S0021999122001528?casa_token=qSelgmHslhoAAAAA:blCti2x6d1pO2-INndWD7joeaAOuGz33nvwJwW3HsLyB59gGGedDCB8LZlRmv9epBe70im6Pqg
 - meeting with Christoph
 - meeting with Laure
-- evaluate the same samples for all evaluations (about 10)
+- evaluate the same samples for all evaluations (about 10) 
