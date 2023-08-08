@@ -83,7 +83,7 @@ def train(
 
             # sample k random elements to get the dataset for the iteration
             indices = np.random.randint(low=0, high=np.min([maml_k, len(train_dataset_target)]), size=maml_k)
-            train_loader_target = DataLoader(Subset(train_dataset_target, indices), batch_size=bsize_base)
+            train_loader_target = DataLoader(Subset(train_dataset_target, indices), batch_size=len(train_dataset_target))
 
             running_loss_outer_ds = 0
             for i_outer, batch in enumerate(train_loader_target):
