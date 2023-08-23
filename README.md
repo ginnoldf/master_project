@@ -61,3 +61,15 @@ notes:
 - meeting with Christoph
 - meeting with Laure
 - evaluate the same samples for all evaluations (about 10) 
+
+
+### Meeting 08/23/2023
+
+- update on ocean data progress
+- plan for last weeks:
+  - https://docs.google.com/spreadsheets/d/1R2dq5GlGxvZhh2bK7Bx9XyiHy_FN2tExlXzBYUqkMF0
+  - when I write the first draft, is there somebody who can go over it?
+  - what meetings do we need? one with Laure when I have ocean results and a final one?
+  - where should my code end up - in a Leap or M2LInES repo?
+- what is expected from my thesis document? present structure so far
+- should we continue with transfer learning somehow?

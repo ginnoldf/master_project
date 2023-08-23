@@ -1,0 +1,34 @@
+writer:
+  logdir: runs/debug
+
+run: maml
+
+data:
+  category: ocean
+  dataConfigPath: datasets/ocean/data_config.yaml
+  baseDatasets:
+    - 400
+  targetDatasets:
+    - 400
+  mamlK: 256
+  batchSizeBase: 64
+
+training:
+  epochs: 30
+  eval_epochs: 10
+  model:
+    name: cnn_dnn2
+    stateDictPath:
+    freezeChildren:
+  loss: mse
+  mamlLR: 0.001
+  optimizer:
+    name: adam
+    lr: 0.001
+    betas: 0.9, 0.999
+  lrScheduler:
+    name: cosineAnnealingWarmRestarts
+    T0: 10
+    TMult: 2
+    etaMin: 0
+    lastEpoch: -1

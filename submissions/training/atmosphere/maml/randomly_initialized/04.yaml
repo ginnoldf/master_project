@@ -1,0 +1,38 @@
+writer:
+  logdir: runs/atmosphere/maml/randomly_initialized/04
+
+run: maml
+
+data:
+  category: atmosphere
+  dataConfigPath: datasets/atmosphere/data_config.yaml
+  baseDatasets:
+    - lz2_lxy16
+    - lz2_lxy32
+    - lz2_lxy64
+    - lz2_lxy128
+    - lz2_lxy256
+  targetDatasets:
+    - lz2_lxy16
+    - lz2_lxy32
+    - lz2_lxy64
+    - lz2_lxy128
+    - lz2_lxy256
+  batchSizeBase: 512
+  mamlK: 200
+
+training:
+  epochs: 400000
+  eval_epochs: 1000
+  model:
+    name: atmosphere
+  loss: mse
+  mamlLR: 0.000001
+  optimizer:
+    name: adam
+    lr: 0.01
+    betas: 0.9, 0.999
+  lrScheduler:
+    name: step
+    stepStepSize: 100000
+    stepGamma: 0.5

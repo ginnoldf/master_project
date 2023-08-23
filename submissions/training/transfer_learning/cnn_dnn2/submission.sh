@@ -1,3 +1,0 @@
-qsub submissions/training/transfer_learning/cnn_dnn2/unfreeze_cnn12.sh
-qsub submissions/training/transfer_learning/cnn_dnn2/unfreeze_dnn3.sh
-qsub submissions/training/transfer_learning/cnn_dnn2/unfreeze_dnn23.sh

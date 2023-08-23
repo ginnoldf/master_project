@@ -34,14 +34,8 @@ def update(default: Mapping, update_values: Mapping):
 
 def get_model(model_dict: Dict):
     model = None
-    if model_dict['name'] == 'simple':
-        model = models.SimpleModel().double()
-    if model_dict['name'] == 'dnn1':
-        model = models.DNN1().double()
-    if model_dict['name'] == 'cnn_dnn1':
-        model = models.CNN_DNN1().double()
-    if model_dict['name'] == 'cnn_dnn2':
-        model = models.CNN_DNN2().double()
+    if model_dict['name'] == 'atmosphere':
+        model = models.atmosphere_model().double()
 
     # load model if specified
     if 'stateDictPath' in model_dict.keys() and not model_dict['stateDictPath'] is None:
@@ -130,6 +124,7 @@ class TrainingConfig:
             self.bsize = self.config_dict['data']['batchSize']
 
         # load data config
+        self.data_category = self.config_dict['data']['category']
         self.data_config_path = self.config_dict['data']['dataConfigPath']
 
         self.epochs = self.config_dict['training']['epochs']

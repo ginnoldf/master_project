@@ -1,10 +1,10 @@
 import yaml
 import numpy as np
 import os
-from typing import List
+from typing import List, Dict
 
 import torch
-from torch.utils.data import TensorDataset, DataLoader, random_split, ConcatDataset
+from torch.utils.data import TensorDataset, DataLoader, ConcatDataset
 
 from training.config import TrainingConfig
 
@@ -16,18 +16,7 @@ def load_datasets_config(data_config_path: str):
     return data_config['datasets']
 
 
-def data_reshape(np_array: np.ndarray):
-    (timesteps, z_dim, x_dim, y_dim) = np_array.shape
-    num_training_samples = timesteps * x_dim * y_dim
-    training_samples = np.zeros((num_training_samples, z_dim))
-    for timestep in range(timesteps):
-        for x_idx in range(x_dim):
-            for y_idx in range(y_dim):
-                training_samples[timestep * x_dim * y_dim + x_idx * y_dim + y_idx] = np_array[timestep, :, x_idx, y_idx]
-    return training_samples
-
-
-def load_data(directories: List[str], subdir: str):
+def load_ds_atmosphere(directories: List[str], subdir: str):
     theta_np_arrays, tkes_np_arrays, thf_np_arrays = [], [], []
 
     # load all numpy arrays
@@ -47,8 +36,107 @@ def load_data(directories: List[str], subdir: str):
     return theta, tkes, thf
 
 
+def load_data_atmosphere(dataset_config: Dict):
+    # load data
+    theta_train, tkes_train, thf_train = load_ds_atmosphere(directories=dataset_config['directories'], subdir='train')
+    theta_test, tkes_test, thf_test = load_ds_atmosphere(directories=dataset_config['directories'], subdir='test')
+
+    # create structured input data
+    in_train = np.stack((theta_train, tkes_train), axis=1)
+    in_test = np.stack((theta_test, tkes_test), axis=1)
+
+    # create torch train and test datasets from numpy arrays
+    dataset_train = TensorDataset(torch.from_numpy(in_train), torch.from_numpy(thf_train))
+    dataset_test = TensorDataset(torch.from_numpy(in_test), torch.from_numpy(thf_test))
+
+    return dataset_train, dataset_test
+
+
+def load_data_ocean(dataset_config: Dict):
+    # load data
+    train_vars = {}
+    test_vars = {}
+    in_vars = ['U_x', 'U_y', 'V_x', 'V_y', 'Sx', 'Sy']
+    out_vars = ['Sfnx', 'Sfny']
+    for var in in_vars + out_vars:
+        train_vars[var] = np.load(os.path.join(dataset_config['directory'], 'train', var + '.npy'))
+        test_vars[var] = np.load(os.path.join(dataset_config['directory'], 'test', var + '.npy'))
+
+    # create structured input and output data
+    in_train = np.stack([train_vars[var] for var in in_vars], axis=1)
+    in_test = np.stack([test_vars[var] for var in in_vars], axis=1)
+    out_train = np.stack([train_vars[var] for var in out_vars], axis=1)
+    out_test = np.stack([test_vars[var] for var in out_vars], axis=1)
+
+    # create torch train and test datasets from numpy arrays
+    dataset_train = TensorDataset(torch.from_numpy(in_train), torch.from_numpy(out_train))
+    dataset_test = TensorDataset(torch.from_numpy(in_test), torch.from_numpy(out_test))
+
+    return dataset_train, dataset_test
+
+
 def get_data(config: TrainingConfig):
-    # read data from disk to numpy arrays
+    if config.data_category == 'ocean' and config.run == 'optimizer':
+        return get_data_opt(config, load_data_ocean)
+    elif config.data_category == 'ocean' and config.run == 'maml':
+        return get_data_maml(config, load_data_ocean)
+    elif config.data_category == 'atmosphere' and config.run == 'optimizer':
+        return get_data_opt(config, load_data_atmosphere)
+    elif config.data_category == 'atmosphere' and config.run == 'optimizer':
+        return get_data_maml(config, load_data_atmosphere())
+    else:
+        return None
+
+
+def get_data_maml(config: TrainingConfig, load_data):
+    # read data config
+    datasets_config = load_datasets_config(config.data_config_path)
+
+    # load all datasets that are described in the data config file
+    eval_dataloaders = []
+    train_datasets_base = []
+    train_datasets_target = []
+    test_datasets_base = []
+    test_datasets_target = []
+    for dataset_config in datasets_config:
+        # load data
+        dataset_train, dataset_test = load_data(dataset_config)
+
+        # handle target and base datasets
+        if dataset_config['name'] in config.base_datasets and dataset_config['name'] in config.target_datasets:
+            train_datasets_base.append(dataset_train)
+            test_datasets_base.append(dataset_test)
+            train_datasets_target.append(dataset_train)
+            test_datasets_target.append(dataset_test)
+            eval_dataloaders.append({'dataset_name': dataset_config['name'],
+                                     'dataloader': DataLoader(dataset_test, batch_size=len(dataset_test),
+                                                              shuffle=False)})
+        elif dataset_config['name'] in config.base_datasets:
+            train_datasets_base.append(dataset_train)
+            test_datasets_base.append(dataset_test)
+            eval_dataloaders.append({'dataset_name': dataset_config['name'],
+                                     'dataloader': DataLoader(dataset_test, batch_size=len(dataset_test),
+                                                              shuffle=False)})
+        elif dataset_config['name'] in config.target_datasets:
+            train_datasets_target.append(dataset_train)
+            test_datasets_target.append(dataset_test)
+            eval_dataloaders.append({'dataset_name': dataset_config['name'],
+                                     'dataloader': DataLoader(dataset_test, batch_size=len(dataset_test),
+                                                              shuffle=False)})
+        else:
+            dataset_all = ConcatDataset([dataset_train, dataset_test])
+            eval_dataloaders.append({'dataset_name': dataset_config['name'],
+                                     'dataloader': DataLoader(dataset_all, batch_size=len(dataset_all), shuffle=False)})
+
+    return train_datasets_base, \
+        train_datasets_target, \
+        ConcatDataset(test_datasets_base), \
+        ConcatDataset(test_datasets_target), \
+        eval_dataloaders
+
+
+def get_data_opt(config: TrainingConfig, load_data):
+    # read data config
     datasets_config = load_datasets_config(config.data_config_path)
 
     # load all datasets that are described in the data config file
@@ -56,16 +144,7 @@ def get_data(config: TrainingConfig):
     train_datasets = []
     for dataset_config in datasets_config:
         # load data
-        theta_train, tkes_train, thf_train = load_data(directories=dataset_config['directories'], subdir='train')
-        theta_test, tkes_test, thf_test = load_data(directories=dataset_config['directories'], subdir='test')
-
-        # create structured input data
-        in_train = np.stack((theta_train, tkes_train), axis=1)
-        in_test = np.stack((theta_test, tkes_test), axis=1)
-
-        # create torch train and test datasets from numpy arrays
-        dataset_train = TensorDataset(torch.from_numpy(in_train), torch.from_numpy(thf_train))
-        dataset_test = TensorDataset(torch.from_numpy(in_test), torch.from_numpy(thf_test))
+        dataset_train, dataset_test = load_data(dataset_config)
 
         # do a train test split on the dataset if we want to train on it
         if dataset_config['name'] in config.train_datasets:
@@ -78,56 +157,3 @@ def get_data(config: TrainingConfig):
                                      'dataloader': DataLoader(dataset_all, batch_size=len(dataset_all), shuffle=False)})
 
     return ConcatDataset(train_datasets), eval_dataloaders
-
-
-def get_data_maml(config: TrainingConfig):
-    # read data from disk to numpy arrays
-    datasets_config = load_datasets_config(config.data_config_path)
-
-    # load all datasets that are described in the data config file
-    eval_dataloaders = []
-    train_datasets_base = []
-    train_datasets_target = []
-    test_datasets_base = []
-    test_datasets_target = []
-    for dataset_config in datasets_config:
-        # load data
-        theta_train, tkes_train, thf_train = load_data(directories=dataset_config['directories'], subdir='train')
-        theta_test, tkes_test, thf_test = load_data(directories=dataset_config['directories'], subdir='test')
-
-        # create structured input data
-        in_train = np.stack((theta_train, tkes_train), axis=1)
-        in_test = np.stack((theta_test, tkes_test), axis=1)
-
-        # create torch train and test datasets from numpy arrays
-        dataset_train = TensorDataset(torch.from_numpy(in_train), torch.from_numpy(thf_train))
-        dataset_test = TensorDataset(torch.from_numpy(in_test), torch.from_numpy(thf_test))
-
-        # do a train test split on the dataset if we want to train on it
-        if dataset_config['name'] in config.base_datasets and dataset_config['name'] in config.target_datasets:
-            train_datasets_base.append(dataset_train)
-            test_datasets_base.append(dataset_test)
-            train_datasets_target.append(dataset_train)
-            test_datasets_target.append(dataset_test)
-            eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_test, batch_size=len(dataset_test), shuffle=False)})
-        elif dataset_config['name'] in config.base_datasets:
-            train_datasets_base.append(dataset_train)
-            test_datasets_base.append(dataset_test)
-            eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_test, batch_size=len(dataset_test), shuffle=False)})
-        elif dataset_config['name'] in config.target_datasets:
-            train_datasets_target.append(dataset_train)
-            test_datasets_target.append(dataset_test)
-            eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_test, batch_size=len(dataset_test), shuffle=False)})
-        else:
-            dataset_all = ConcatDataset([dataset_train, dataset_test])
-            eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_all, batch_size=len(dataset_all), shuffle=False)})
-
-    return train_datasets_base, \
-        train_datasets_target, \
-        ConcatDataset(test_datasets_base), \
-        ConcatDataset(test_datasets_target), \
-        eval_dataloaders

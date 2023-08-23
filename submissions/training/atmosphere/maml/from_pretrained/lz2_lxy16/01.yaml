@@ -1,0 +1,34 @@
+writer:
+  logdir: runs/atmosphere/maml/from_pretrained/lz2_lxy16/01
+
+run: maml
+
+data:
+  category: atmosphere
+  dataConfigPath: datasets/atmosphere/data_config.yaml
+  baseDatasets:
+    - lz2_lxy16
+  targetDatasets:
+    - lz2_lxy32
+    - lz2_lxy64
+    - lz2_lxy128
+    - lz2_lxy256
+  batchSizeBase: 256
+  mamlK: 99999999999
+
+training:
+  epochs: 20000
+  eval_epochs: 50
+  model:
+    name: atmosphere
+    stateDictPath: runs/cnn_dnn2/cosine_annealing/lz2_lxy16/model.pt
+  loss: mse
+  mamlLR: 0.00001
+  optimizer:
+    name: adam
+    lr: 0.001
+    betas: 0.9, 0.999
+  lrScheduler:
+    name: step
+    stepStepSize: 2000
+    stepGamma: 0.5

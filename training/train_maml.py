@@ -74,7 +74,7 @@ def train(
         # evaluation of inner loop on base test set
         test_loss_inner, _ = evaluate_dataset(device=device,
                                               model=learner,
-                                              dataloader=DataLoader(test_dataset_base, batch_size=len(test_dataset_base), shuffle=False),
+                                              dataloader=DataLoader(test_dataset_base, batch_size=256, shuffle=False),
                                               loss_fn=loss_fn)
 
         # outer loop, iterative for all target datasets
@@ -82,8 +82,8 @@ def train(
         for train_dataset_target in train_datasets_target:
 
             # sample k random elements to get the dataset for the iteration
-            indices = np.random.randint(low=0, high=np.min([maml_k, len(train_dataset_target)]), size=maml_k)
-            train_loader_target = DataLoader(Subset(train_dataset_target, indices), batch_size=len(train_dataset_target))
+            indices = np.random.randint(low=0, high=len(train_dataset_target), size=np.min([maml_k, len(train_dataset_target)]))
+            train_loader_target = DataLoader(Subset(train_dataset_target, indices), batch_size=256)
 
             running_loss_outer_ds = 0
             for i_outer, batch in enumerate(train_loader_target):
