@@ -2,9 +2,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class atmosphere_model(nn.Module):
+class AtmosphereModel(nn.Module):
     def __init__(self):
-        super(atmosphere_model, self).__init__()
+        super(AtmosphereModel, self).__init__()
         self.conv1 = nn.Conv1d(2, 8, 5)
         self.conv2 = nn.Conv1d(8, 20, 5)
         self.activ = nn.ReLU()
@@ -21,6 +21,23 @@ class atmosphere_model(nn.Module):
         x = self.activ(x)
         x = self.pool(x)
         x = x.view(-1, 20 * 19)
+        x = self.fc1(x)
+        x = F.relu(x)
+        x = self.fc2(x)
+        x = F.relu(x)
+        x = self.fc3(x)
+        return x
+
+
+class OceanModel(nn.Module):
+    def __init__(self):
+        super(OceanModel, self).__init__()
+        self.activ = nn.ReLU()
+        self.fc1 = nn.Linear(6, 24)
+        self.fc2 = nn.Linear(24, 24)
+        self.fc3 = nn.Linear(24, 2)
+
+    def forward(self, x):
         x = self.fc1(x)
         x = F.relu(x)
         x = self.fc2(x)

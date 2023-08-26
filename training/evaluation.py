@@ -12,7 +12,8 @@ def evaluation(device: torch.device,
                model: torch.nn.Module,
                eval_dataloaders: List[Dict],
                loss_fn,
-               global_step: int):
+               global_step: int,
+               data_category: str):
     model.eval()
     with torch.no_grad():
 
@@ -43,7 +44,7 @@ def evaluation(device: torch.device,
             sample_evaluation = []
             for sample_idx in sample_indices:
                 truth = dataloader.dataset[sample_idx][1].numpy()
-                pred = model(dataloader.dataset[sample_idx][0].to(device)).cpu().numpy()
+                pred = model(dataloader.dataset[sample_idx][0].double().to(device)).cpu().numpy()
                 sample_evaluation.append({'truth': truth, 'pred': pred})
 
             all_datasets_evaluation.append({'dataset': eval_dataloader['dataset_name'],
@@ -55,7 +56,8 @@ def evaluation(device: torch.device,
 
     writer.evaluation(global_step=global_step,
                       epoch=epoch,
-                      all_datasets_evaluation=all_datasets_evaluation)
+                      all_datasets_evaluation=all_datasets_evaluation,
+                      data_category=data_category)
 
 
 def evaluate_dataset(device: torch.device, model: torch.nn.Module, dataloader: DataLoader, loss_fn):
@@ -65,7 +67,7 @@ def evaluate_dataset(device: torch.device, model: torch.nn.Module, dataloader: D
         for i, test_batch in enumerate(dataloader):
             test_inputs, test_outputs_true = test_batch
             test_outputs_model = model(test_inputs.double().to(device))
-            test_loss = loss_fn(test_outputs_model.to(device), test_outputs_true.to(device))
+            test_loss = loss_fn(test_outputs_model.double().to(device), test_outputs_true.double().to(device))
             running_test_loss += test_loss
 
             # add up mean of predictions

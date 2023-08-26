@@ -26,7 +26,8 @@ def train(
         model: torch.nn.Module,
         lr_maml: float,
         loss_fn,
-        eval_epochs: int
+        eval_epochs: int,
+        data_category: str
 ):
 
     # create the maml model
@@ -132,4 +133,5 @@ def train(
                        model=model,
                        eval_dataloaders=eval_dataloaders,
                        loss_fn=loss_fn,
-                       global_step=epoch + 1)
+                       global_step=epoch + 1,
+                       data_category=data_category)

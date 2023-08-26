@@ -26,7 +26,7 @@ def train_one_epoch(
         outputs_model = model(inputs.double().to(device))
 
         # compute the loss and its gradients
-        loss = loss_fn(outputs_model.to(device), outputs_true.to(device))
+        loss = loss_fn(outputs_model.double().to(device), outputs_true.double().to(device))
         loss.backward()
 
         # actual learning step
@@ -50,7 +50,8 @@ def train(
         lr_scheduler,
         model: torch.nn.Module,
         loss_fn,
-        eval_epochs: int
+        eval_epochs: int,
+        data_category: str
 ):
 
     for epoch in range(epochs):
@@ -75,4 +76,5 @@ def train(
                        model=model,
                        eval_dataloaders=eval_dataloaders,
                        loss_fn=loss_fn,
-                       global_step=len(train_dataset) * (epoch + 1))
+                       global_step=len(train_dataset) * (epoch + 1),
+                       data_category=data_category)

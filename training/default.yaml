@@ -21,7 +21,7 @@ training:
   epochs: 2000
   eval_epochs: 50
   model:
-    name: simple
+    name: atmosphere
   loss: mse
   optimizer:
     name: sgd

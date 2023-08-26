@@ -11,4 +11,4 @@
 module load conda
 conda activate npl
 
-python3 preprocessing/coarse_grain_data.py --sim-name=16_03 --output-dir=/glade/u/home/fginnold/master_project/datasets/training_data/lz2/lxy128/ --Lx=128 --Ly=128 --Lz=2 --surface-flux=0.03
+python3 preprocessing/atmosphere/coarse_grain_data.py --sim-name=16_03 --output-dir=/glade/u/home/fginnold/master_project/datasets/atmosphere/lz2/lxy128/ --Lx=128 --Ly=128 --Lz=2 --surface-flux=0.03

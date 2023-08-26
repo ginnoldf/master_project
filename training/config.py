@@ -33,9 +33,12 @@ def update(default: Mapping, update_values: Mapping):
 
 
 def get_model(model_dict: Dict):
-    model = None
     if model_dict['name'] == 'atmosphere':
-        model = models.atmosphere_model().double()
+        model = models.AtmosphereModel().double()
+    elif model_dict['name'] == 'ocean':
+        model = models.OceanModel().double()
+    else:
+        return None
 
     # load model if specified
     if 'stateDictPath' in model_dict.keys() and not model_dict['stateDictPath'] is None:

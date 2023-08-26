@@ -34,7 +34,8 @@ def main():
             optimizer=config.optimizer,
             lr_scheduler=config.lr_scheduler,
             model=config.model,
-            loss_fn=config.loss_fn
+            loss_fn=config.loss_fn,
+            data_category=config.data_category
         )
 
     # maml run
@@ -59,7 +60,8 @@ def main():
             lr_scheduler=config.lr_scheduler,
             model=config.model,
             lr_maml=config.lr_maml,
-            loss_fn=config.loss_fn
+            loss_fn=config.loss_fn,
+            data_cateogry=config.data_category
         )
 
     writer.end(config=config)
