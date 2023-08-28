@@ -8,15 +8,13 @@ data:
   dataConfigPath: datasets/ocean/data_config.yaml
   trainDatasets:
     - lsel400
-  batchSize: 64
+  batchSize: 8192
 
 training:
   epochs: 30
   eval_epochs: 1
   model:
     name: ocean
-    stateDictPath:
-    freezeChildren:
   loss: mse
   optimizer:
     name: adam

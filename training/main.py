@@ -61,7 +61,7 @@ def main():
             model=config.model,
             lr_maml=config.lr_maml,
             loss_fn=config.loss_fn,
-            data_cateogry=config.data_category
+            data_category=config.data_category
         )
 
     writer.end(config=config)

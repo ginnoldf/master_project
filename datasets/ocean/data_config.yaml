@@ -1,13 +1,13 @@
 datasets:
-  - name: lsel400
-    lsel: 400
-    directory: datasets/ocean/lsel400
-  - name: lsel50
-    lsel: 50
-    directory: datasets/ocean/lsel50
+#  - name: lsel50
+#    lsel: 50
+#    directory: datasets/ocean/lsel50
   - name: lsel100
     lsel: 100
     directory: datasets/ocean/lsel100
   - name: lsel200
     lsel: 200
     directory: datasets/ocean/lsel200
+  - name: lsel400
+    lsel: 400
+    directory: datasets/ocean/lsel400

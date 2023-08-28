@@ -21,7 +21,7 @@ training:
   eval_epochs: 50
   model:
     name: atmosphere
-    stateDictPath: runs/cnn_dnn2/cosine_annealing/lz2_lxy256/model.pt
+    stateDictPath: runs/atmosphere/opt/cosine_annealing/lz2_lxy16/model.pt
   loss: mse
   mamlLR: 0.00001
   optimizer:

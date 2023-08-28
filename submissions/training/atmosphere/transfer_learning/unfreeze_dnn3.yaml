@@ -19,7 +19,7 @@ training:
   eval_epochs: 200
   model:
     name: atmosphere
-    stateDictPath: runs/cnn_dnn2/cosine_annealing/lz2_lxy16/model.pt
+    stateDictPath: runs/atmosphere/opt/cosine_annealing/lz2_lxy16/model.pt
     freezeChildren:
       - 0
       - 1

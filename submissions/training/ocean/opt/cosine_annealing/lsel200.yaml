@@ -1,5 +1,5 @@
 writer:
-  logdir: runs/ocean/opt/cosine_annealing/all
+  logdir: runs/ocean/opt/cosine_annealing/lsel400
 
 run: optimizer
 
@@ -12,7 +12,7 @@ data:
 
 training:
   epochs: 1000
-  eval_epochs: 5
+  eval_epochs: 1
   model:
     name: ocean
   loss: mse

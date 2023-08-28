@@ -35,8 +35,8 @@ def main():
 
         # split and save data
         for var in variables:
-            np.save(os.path.join(train_dir, var), vars_dict[var][test_idx])
-            np.save(os.path.join(test_dir, var), vars_dict[var][train_idx])
+            np.save(os.path.join(train_dir, var), vars_dict[var][train_idx])
+            np.save(os.path.join(test_dir, var), vars_dict[var][test_idx])
 
 
 if __name__ == '__main__':

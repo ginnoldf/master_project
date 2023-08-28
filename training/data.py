@@ -9,6 +9,15 @@ from torch.utils.data import TensorDataset, DataLoader, ConcatDataset
 from training.config import TrainingConfig
 
 
+def get_load_data_fn(data_category: str):
+    if data_category == 'atmosphere':
+        return load_data_atmosphere
+    elif data_category == 'ocean':
+        return load_data_ocean
+    else:
+        return None
+
+
 # load data config to read file paths from
 def load_datasets_config(data_config_path: str):
     with open(data_config_path, 'r') as file:
@@ -88,9 +97,12 @@ def get_data(config: TrainingConfig):
         return None
 
 
-def get_data_maml(config: TrainingConfig, load_data):
+def get_data_maml(config: TrainingConfig):
     # read data config
     datasets_config = load_datasets_config(config.data_config_path)
+
+    # get data loading function
+    load_data = get_load_data_fn(config.data_category)
 
     # load all datasets that are described in the data config file
     eval_dataloaders = []
@@ -135,9 +147,12 @@ def get_data_maml(config: TrainingConfig, load_data):
         eval_dataloaders
 
 
-def get_data_opt(config: TrainingConfig, load_data):
+def get_data_opt(config: TrainingConfig, data_category: str):
     # read data config
     datasets_config = load_datasets_config(config.data_config_path)
+
+    # get data loading function
+    load_data = get_load_data_fn(config.data_category)
 
     # load all datasets that are described in the data config file
     eval_dataloaders = []
