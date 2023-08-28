@@ -54,7 +54,8 @@ def evaluation(device: torch.device,
                                             'true_std': true_std,
                                             'sample_evaluation': sample_evaluation})
 
-    writer.evaluation(global_step=global_step,
+    writer.evaluation(model=model,
+                      global_step=global_step,
                       epoch=epoch,
                       all_datasets_evaluation=all_datasets_evaluation,
                       data_category=data_category)
