@@ -138,6 +138,7 @@ class TrainingConfig:
                                        model=self.model)
         self.lr_scheduler = get_lr_scheduler(lr_scheduler=self.config_dict['training']['lrScheduler'],
                                              optimizer=self.optimizer)
+        self.plotting = self.config_dict['training']['plotting']
 
     def save(self, logdir):
         with open(os.path.join(logdir, 'config.yaml'), 'w') as f:

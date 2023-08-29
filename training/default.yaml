@@ -32,3 +32,4 @@ training:
     name: step
     stepStepSize: 1000
     stepGamma: 0.5
+  plotting: False

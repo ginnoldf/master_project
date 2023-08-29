@@ -21,13 +21,13 @@ def train(
         bsize_base: int,
         eval_dataloaders: List[Dict],
         optimizer: torch.optim.Optimizer,
-        #lr_scheduler: torch.optim.lr_scheduler.LRScheduler,
         lr_scheduler,
         model: torch.nn.Module,
         lr_maml: float,
         loss_fn,
         eval_epochs: int,
-        data_category: str
+        data_category: str,
+        plotting: bool
 ):
 
     # create the maml model
@@ -114,7 +114,7 @@ def train(
         # evaluation of inner loop on base test set
         test_loss_outer, _ = evaluate_dataset(device=device,
                                               model=learner,
-                                              dataloader=DataLoader(test_dataset_target, batch_size=len(test_dataset_target), shuffle=False),
+                                              dataloader=DataLoader(test_dataset_target, batch_size=10000, shuffle=False),
                                               loss_fn=loss_fn)
 
         # gather data and report
@@ -134,4 +134,5 @@ def train(
                        eval_dataloaders=eval_dataloaders,
                        loss_fn=loss_fn,
                        global_step=epoch + 1,
-                       data_category=data_category)
+                       data_category=data_category,
+                       plotting=plotting)

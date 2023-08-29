@@ -20,7 +20,9 @@ def main():
     # normal optimizer run
     if config.run == 'optimizer':
         # load data and structure it to train, test and eval datasets
+        print('start loading data')
         train_dataset, eval_dataloaders = data.get_data(config=config)
+        print('data loaded')
 
         # training
         train.train(
@@ -35,13 +37,15 @@ def main():
             lr_scheduler=config.lr_scheduler,
             model=config.model,
             loss_fn=config.loss_fn,
-            data_category=config.data_category
+            data_category=config.data_category,
+            plotting=config.plotting
         )
 
     # maml run
     if config.run == 'maml':
         # load data and structure it to train, test and eval datasets for base and target
         train_datasets_base, train_datasets_target, test_dataset_base, test_dataset_target, eval_dataloaders = data.get_data_maml(config)
+        print('data loaded')
 
         # training
         train_maml.train(
@@ -61,7 +65,8 @@ def main():
             model=config.model,
             lr_maml=config.lr_maml,
             loss_fn=config.loss_fn,
-            data_category=config.data_category
+            data_category=config.data_category,
+            plotting=config.plotting
         )
 
     writer.end(config=config)

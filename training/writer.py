@@ -19,7 +19,6 @@ class Writer:
         self.steps = np.array([])
         self.eval_dict = {}
 
-
     def step(self, global_step, lr, loss_per_batch):
         #self.tb_writer.add_scalar('learning rate', scalar_value=lr, global_step=global_step)
         #self.tb_writer.add_scalar('loss per train batch', scalar_value=loss_per_batch, global_step=global_step)
@@ -35,7 +34,7 @@ class Writer:
     def epoch(self, global_step, avg_loss):
         self.tb_writer.add_scalar('avg loss over epoch', scalar_value=avg_loss, global_step=global_step)
 
-    def evaluation(self, model, global_step, epoch, all_datasets_evaluation, data_category):
+    def evaluation(self, model, global_step, epoch, all_datasets_evaluation, data_category, plotting):
         # save model
         torch.save(model.state_dict(), os.path.join(self.logdir, 'model.pt'))
 
@@ -57,7 +56,7 @@ class Writer:
             np.save(os.path.join(self.numpy_dir, dataset_evaluation['dataset']), self.eval_dict[dataset_evaluation['dataset']])
 
             # create plots for prediction mean and samples
-            if data_category == 'atmosphere':
+            if data_category == 'atmosphere' and plotting is True:
                 # create plot directory if necessary and plot means
                 means_plot_dir = os.path.join(self.logdir, 'eval', dataset_evaluation['dataset'], 'means')
                 if not os.path.exists(means_plot_dir):

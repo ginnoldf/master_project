@@ -121,24 +121,24 @@ def get_data_maml(config: TrainingConfig):
             train_datasets_target.append(dataset_train)
             test_datasets_target.append(dataset_test)
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_test, batch_size=len(dataset_test),
+                                     'dataloader': DataLoader(dataset_test, batch_size=100000,
                                                               shuffle=False)})
         elif dataset_config['name'] in config.base_datasets:
             train_datasets_base.append(dataset_train)
             test_datasets_base.append(dataset_test)
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_test, batch_size=len(dataset_test),
+                                     'dataloader': DataLoader(dataset_test, batch_size=100000,
                                                               shuffle=False)})
         elif dataset_config['name'] in config.target_datasets:
             train_datasets_target.append(dataset_train)
             test_datasets_target.append(dataset_test)
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_test, batch_size=len(dataset_test),
+                                     'dataloader': DataLoader(dataset_test, batch_size=100000,
                                                               shuffle=False)})
         else:
             dataset_all = ConcatDataset([dataset_train, dataset_test])
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_all, batch_size=len(dataset_all), shuffle=False)})
+                                     'dataloader': DataLoader(dataset_all, batch_size=100000, shuffle=False)})
 
     return train_datasets_base, \
         train_datasets_target, \
@@ -159,16 +159,17 @@ def get_data_opt(config: TrainingConfig, data_category: str):
     train_datasets = []
     for dataset_config in datasets_config:
         # load data
+        print('load data for ' + dataset_config['name'])
         dataset_train, dataset_test = load_data(dataset_config)
 
-        # do a train test split on the dataset if we want to train on it
+        # dont evaluate on training data
         if dataset_config['name'] in config.train_datasets:
             train_datasets.append(dataset_train)
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_test, batch_size=len(dataset_test), shuffle=False)})
+                                     'dataloader': DataLoader(dataset_test, batch_size=100000, shuffle=False)})
         else:
             dataset_all = ConcatDataset([dataset_train, dataset_test])
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_all, batch_size=len(dataset_all), shuffle=False)})
+                                     'dataloader': DataLoader(dataset_all, batch_size=100000, shuffle=False)})
 
     return ConcatDataset(train_datasets), eval_dataloaders

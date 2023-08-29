@@ -1,5 +1,5 @@
 writer:
-  logdir: runs/ocean/opt/cosine_annealing/lsel400
+  logdir: runs/ocean/opt/cosine_annealing/lsel400_cpu
 
 run: optimizer
 
@@ -22,7 +22,7 @@ training:
     betas: 0.9, 0.999
   lrScheduler:
     name: cosineAnnealingWarmRestarts
-    T0: 3000
+    T0: 200
     TMult: 2
     etaMin: 0
     lastEpoch: -1

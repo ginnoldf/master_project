@@ -51,7 +51,8 @@ def train(
         model: torch.nn.Module,
         loss_fn,
         eval_epochs: int,
-        data_category: str
+        data_category: str,
+        plotting: bool
 ):
 
     for epoch in range(epochs):
@@ -64,6 +65,7 @@ def train(
                         loss_fn=loss_fn,
                         optimizer=optimizer,
                         global_steps_start=epoch * len(train_dataset))
+        print('epoch done')
 
         # lr scheduling
         lr_scheduler.step()
@@ -77,4 +79,6 @@ def train(
                        eval_dataloaders=eval_dataloaders,
                        loss_fn=loss_fn,
                        global_step=len(train_dataset) * (epoch + 1),
-                       data_category=data_category)
+                       data_category=data_category,
+                       plotting=plotting)
+        print('evaluation done')

@@ -13,13 +13,15 @@ def evaluation(device: torch.device,
                eval_dataloaders: List[Dict],
                loss_fn,
                global_step: int,
-               data_category: str):
+               data_category: str,
+               plotting: bool):
     model.eval()
     with torch.no_grad():
 
         # evaluate model on all datasets
         all_datasets_evaluation = []
         for eval_dataloader in eval_dataloaders:
+            print('evaluation for ' + eval_dataloader['dataset_name'])
             # get avg loss for all datasets
             dataloader = eval_dataloader['dataloader']
             avg_loss, pred_mean = evaluate_dataset(device=device,
@@ -58,7 +60,8 @@ def evaluation(device: torch.device,
                       global_step=global_step,
                       epoch=epoch,
                       all_datasets_evaluation=all_datasets_evaluation,
-                      data_category=data_category)
+                      data_category=data_category,
+                      plotting=plotting)
 
 
 def evaluate_dataset(device: torch.device, model: torch.nn.Module, dataloader: DataLoader, loss_fn):
