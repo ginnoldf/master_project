@@ -20,9 +20,7 @@ def main():
     # normal optimizer run
     if config.run == 'optimizer':
         # load data and structure it to train, test and eval datasets
-        print('start loading data')
         train_dataset, eval_dataloaders = data.get_data(config=config)
-        print('data loaded')
 
         # training
         train.train(
@@ -45,7 +43,6 @@ def main():
     if config.run == 'maml':
         # load data and structure it to train, test and eval datasets for base and target
         train_datasets_base, train_datasets_target, test_dataset_base, test_dataset_target, eval_dataloaders = data.get_data_maml(config)
-        print('data loaded')
 
         # training
         train_maml.train(

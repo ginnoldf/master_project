@@ -21,7 +21,6 @@ def evaluation(device: torch.device,
         # evaluate model on all datasets
         all_datasets_evaluation = []
         for eval_dataloader in eval_dataloaders:
-            print('evaluation for ' + eval_dataloader['dataset_name'])
             # get avg loss for all datasets
             dataloader = eval_dataloader['dataloader']
             avg_loss, pred_mean = evaluate_dataset(device=device,

@@ -114,7 +114,7 @@ def train(
         # evaluation of inner loop on base test set
         test_loss_outer, _ = evaluate_dataset(device=device,
                                               model=learner,
-                                              dataloader=DataLoader(test_dataset_target, batch_size=10000, shuffle=False),
+                                              dataloader=DataLoader(test_dataset_target, batch_size=256, shuffle=False),
                                               loss_fn=loss_fn)
 
         # gather data and report

@@ -65,7 +65,6 @@ def train(
                         loss_fn=loss_fn,
                         optimizer=optimizer,
                         global_steps_start=epoch * len(train_dataset))
-        print('epoch done')
 
         # lr scheduling
         lr_scheduler.step()
@@ -81,4 +80,3 @@ def train(
                        global_step=len(train_dataset) * (epoch + 1),
                        data_category=data_category,
                        plotting=plotting)
-        print('evaluation done')

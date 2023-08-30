@@ -1,5 +1,5 @@
 writer:
-  logdir: runs/ocean/opt/cosine_annealing/lsel400
+  logdir: runs/ocean/opt/step_lr/all
 
 run: optimizer
 
@@ -7,22 +7,23 @@ data:
   category: ocean
   dataConfigPath: datasets/ocean/data_config.yaml
   trainDatasets:
+    - lsel50
+    - lsel100
+    - lsel200
     - lsel400
-  batchSize: 10000
+  batchSize: 256
 
 training:
-  epochs: 1000
+  epochs: 30
   eval_epochs: 1
   model:
     name: ocean
   loss: mse
   optimizer:
     name: adam
-    lr: 0.001
+    lr: 0.0001
     betas: 0.9, 0.999
   lrScheduler:
-    name: cosineAnnealingWarmRestarts
-    T0: 200
-    TMult: 2
-    etaMin: 0
-    lastEpoch: -1
+    name: step
+    stepStepSize: 10
+    stepGamma: 0.5

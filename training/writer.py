@@ -16,12 +16,20 @@ class Writer:
         if not os.path.exists(self.numpy_dir):
             os.makedirs(self.numpy_dir)
         self.tb_writer = SummaryWriter(logdir=logdir)
-        self.steps = np.array([])
-        self.eval_dict = {}
+        self.numpy_dict = {}
+
+    def __save_numpy_value__(self, value_name: str, value):
+        if value_name not in self.numpy_dict:
+            self.numpy_dict[value_name] = np.array([])
+        self.numpy_dict[value_name] = np.append(self.numpy_dict[value_name], [value])
+        np.save(os.path.join(self.numpy_dir, value_name),
+                self.numpy_dict[value_name])
 
     def step(self, global_step, lr, loss_per_batch):
         #self.tb_writer.add_scalar('learning rate', scalar_value=lr, global_step=global_step)
         #self.tb_writer.add_scalar('loss per train batch', scalar_value=loss_per_batch, global_step=global_step)
+        self.__save_numpy_value__('lr', lr)
+        self.__save_numpy_value__('train_loss', loss_per_batch)
         return
 
     def step_maml(self, global_step, lr_opt, loss_inner, loss_outer, test_loss_outer, test_loss_inner):
@@ -30,6 +38,9 @@ class Writer:
         self.tb_writer.add_scalar('train loss outer loop', scalar_value=loss_outer, global_step=global_step)
         #self.tb_writer.add_scalar('test loss outer loop', scalar_value=test_loss_outer, global_step=global_step)
         #self.tb_writer.add_scalar('test loss inner loop', scalar_value=test_loss_inner, global_step=global_step)
+        self.__save_numpy_value__('lr_opt', lr_opt)
+        self.__save_numpy_value__('train_loss_inner', loss_inner)
+        self.__save_numpy_value__('train_loss_outer', loss_outer)
 
     def epoch(self, global_step, avg_loss):
         self.tb_writer.add_scalar('avg loss over epoch', scalar_value=avg_loss, global_step=global_step)
@@ -39,8 +50,7 @@ class Writer:
         torch.save(model.state_dict(), os.path.join(self.logdir, 'model.pt'))
 
         # save step number for later plotting
-        self.steps = np.append(self.steps, [global_step])
-        np.save(os.path.join(self.numpy_dir, 'steps'), self.steps)
+        self.__save_numpy_value__('eval_steps', global_step)
 
         # write evaluation on all datasets
         for dataset_evaluation in all_datasets_evaluation:
@@ -49,11 +59,7 @@ class Writer:
                                       global_step=global_step)
 
             # save dataset evaluation numpy files
-            if not dataset_evaluation['dataset'] in self.eval_dict:
-                self.eval_dict[dataset_evaluation['dataset']] = np.array([])
-            self.eval_dict[dataset_evaluation['dataset']] = np.append(self.eval_dict[dataset_evaluation['dataset']],
-                                                                      [dataset_evaluation['avg_loss']])
-            np.save(os.path.join(self.numpy_dir, dataset_evaluation['dataset']), self.eval_dict[dataset_evaluation['dataset']])
+            self.__save_numpy_value__('eval' + dataset_evaluation['dataset'], dataset_evaluation['avg_loss'])
 
             # create plots for prediction mean and samples
             if data_category == 'atmosphere' and plotting is True:

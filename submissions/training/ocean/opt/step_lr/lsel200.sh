@@ -2,7 +2,7 @@
 #PBS -N ocean_opt_cos_lsel200
 #PBS -A uclb0017
 #PBS -l select=1:ncpus=4:mem=256GB:ngpus=1
-#PBS -l walltime=10:00:00
+#PBS -l walltime=24:00:00
 #PBS -q casper
 #PBS -j oe
 #PBS -M fkg2106@columbia.edu
