@@ -8,19 +8,19 @@ data:
   dataConfigPath: datasets/ocean/data_config.yaml
   trainDatasets:
     - lsel400
-  batchSize: 256
+  batchSize: 75600
 
 training:
-  epochs: 30
-  eval_epochs: 1
+  epochs: 600
+  eval_epochs: 10
   model:
     name: ocean
   loss: mse
   optimizer:
     name: adam
-    lr: 0.001
+    lr: 0.01
     betas: 0.9, 0.999
   lrScheduler:
     name: step
-    stepStepSize: 10
+    stepStepSize: 200
     stepGamma: 0.5

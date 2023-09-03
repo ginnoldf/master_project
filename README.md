@@ -73,3 +73,6 @@ notes:
   - where should my code end up - in a Leap or M2LInES repo?
 - what is expected from my thesis document? present structure so far
 - should we continue with transfer learning somehow?
+- thesis document specific questions:
+  - 
+  - 

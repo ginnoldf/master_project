@@ -78,8 +78,10 @@ def load_data_ocean(dataset_config: Dict):
     out_test = np.stack([test_vars[var] for var in out_vars], axis=1)
 
     # create torch train and test datasets from numpy arrays
-    dataset_train = TensorDataset(torch.from_numpy(in_train), torch.from_numpy(out_train))
-    dataset_test = TensorDataset(torch.from_numpy(in_test), torch.from_numpy(out_test))
+    indices_train = np.random.permutation(len(in_train))
+    indices_test = np.random.permutation(len(in_test))
+    dataset_train = TensorDataset(torch.from_numpy(in_train[indices_train[:3000000]]), torch.from_numpy(out_train[indices_train[:3000000]]))
+    dataset_test = TensorDataset(torch.from_numpy(in_test[indices_test[:500000]]), torch.from_numpy(out_test[indices_test[:500000]]))
 
     return dataset_train, dataset_test
 
@@ -121,24 +123,24 @@ def get_data_maml(config: TrainingConfig):
             train_datasets_target.append(dataset_train)
             test_datasets_target.append(dataset_test)
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_test, batch_size=256,
+                                     'dataloader': DataLoader(dataset_test, batch_size=75600,
                                                               shuffle=False)})
         elif dataset_config['name'] in config.base_datasets:
             train_datasets_base.append(dataset_train)
             test_datasets_base.append(dataset_test)
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_test, batch_size=256,
+                                     'dataloader': DataLoader(dataset_test, batch_size=75600,
                                                               shuffle=False)})
         elif dataset_config['name'] in config.target_datasets:
             train_datasets_target.append(dataset_train)
             test_datasets_target.append(dataset_test)
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_test, batch_size=256,
+                                     'dataloader': DataLoader(dataset_test, batch_size=75600,
                                                               shuffle=False)})
         else:
             dataset_all = ConcatDataset([dataset_train, dataset_test])
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_all, batch_size=256, shuffle=False)})
+                                     'dataloader': DataLoader(dataset_all, batch_size=75600, shuffle=False)})
 
     return train_datasets_base, \
         train_datasets_target, \
@@ -165,10 +167,10 @@ def get_data_opt(config: TrainingConfig, data_category: str):
         if dataset_config['name'] in config.train_datasets:
             train_datasets.append(dataset_train)
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_test, batch_size=256, shuffle=False)})
+                                     'dataloader': DataLoader(dataset_test, batch_size=75600, shuffle=False)})
         else:
             dataset_all = ConcatDataset([dataset_train, dataset_test])
             eval_dataloaders.append({'dataset_name': dataset_config['name'],
-                                     'dataloader': DataLoader(dataset_all, batch_size=256, shuffle=False)})
+                                     'dataloader': DataLoader(dataset_all, batch_size=75600, shuffle=False)})
 
     return ConcatDataset(train_datasets), eval_dataloaders

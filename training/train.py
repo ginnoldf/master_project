@@ -1,6 +1,7 @@
 import torch
-from torch.utils.data import DataLoader, Dataset, ConcatDataset
+from torch.utils.data import DataLoader, Dataset
 from typing import Dict, List
+import math
 
 from training.writer import Writer
 from training.evaluation import evaluation
@@ -46,7 +47,6 @@ def train(
         bsize: int,
         eval_dataloaders: List[Dict],
         optimizer: torch.optim.Optimizer,
-        #lr_scheduler: torch.optim.lr_scheduler.LRScheduler,
         lr_scheduler,
         model: torch.nn.Module,
         loss_fn,
@@ -64,7 +64,7 @@ def train(
                         model=model,
                         loss_fn=loss_fn,
                         optimizer=optimizer,
-                        global_steps_start=epoch * len(train_dataset))
+                        global_steps_start=epoch * math.ceil(len(train_dataset)/bsize))
 
         # lr scheduling
         lr_scheduler.step()
@@ -77,6 +77,6 @@ def train(
                        model=model,
                        eval_dataloaders=eval_dataloaders,
                        loss_fn=loss_fn,
-                       global_step=len(train_dataset) * (epoch + 1),
+                       global_step=math.ceil(len(train_dataset)/bsize) * (epoch + 1),
                        data_category=data_category,
                        plotting=plotting)

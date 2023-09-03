@@ -1,7 +1,7 @@
 datasets:
 #  - name: lsel50
 #    lsel: 50
-#    directory: datasets/ocean/lsel50
+#   directory: datasets/ocean/lsel50
   - name: lsel100
     lsel: 100
     directory: datasets/ocean/lsel100
