@@ -16,7 +16,7 @@ data:
 
 training:
   epochs: 6000
-  eval_epochs: 100
+  eval_epochs: 5
   model:
     name: atmosphere
   loss: mse

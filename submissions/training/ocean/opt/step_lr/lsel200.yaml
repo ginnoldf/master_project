@@ -11,7 +11,7 @@ data:
   batchSize: 75600
 
 training:
-  epochs: 600
+  epochs: 300
   eval_epochs: 10
   model:
     name: ocean

@@ -11,8 +11,8 @@ data:
   batchSize: 75600
 
 training:
-  epochs: 800
-  eval_epochs: 5
+  epochs: 300
+  eval_epochs: 1
   model:
     name: ocean
   loss: mse
@@ -22,7 +22,7 @@ training:
     betas: 0.9, 0.999
   lrScheduler:
     name: cosineAnnealingWarmRestarts
-    T0: 100
+    T0: 50
     TMult: 2
     etaMin: 0
     lastEpoch: -1

@@ -26,5 +26,5 @@ training:
     betas: 0.9, 0.999
   lrScheduler:
     name: step
-    stepStepSize: 1250
+    stepStepSize: 7000
     stepGamma: 0.5

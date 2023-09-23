@@ -11,8 +11,8 @@ data:
   batchSize: 75600
 
 training:
-  epochs: 1000
-  eval_epochs: 25
+  epochs: 300
+  eval_epochs: 10
   model:
     name: ocean
   loss: mse

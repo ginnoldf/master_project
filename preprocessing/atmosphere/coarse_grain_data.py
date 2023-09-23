@@ -101,6 +101,9 @@ def main():
         theta = shift(theta) * TSCALE
         t_sgs *= TSCALE
 
+        # normalize theta using the min
+        theta -= np.min(theta)
+
         # calculate theta, tke and theta covariance into existing numpy array
         theta_coarse[timestep_idx] = coarse_grain(theta, cf=args.cf)
         tkes_coarse[timestep_idx] = make_tke(w=w_velocity, u=u_velocity, v=v_velocity, cf=args.cf)
@@ -110,9 +113,6 @@ def main():
         # logging
         toc = time.perf_counter()
         print("Calculation done for timestep " + str(timestep_idx) + f" in {toc - tic:0.4f}s.")
-
-    # normalize theta using the min
-    theta_coarse -= np.min(theta_coarse)
 
     # save constructed arrays in files
     np.save(os.path.join(args.output_dir, args.sim_name, 'theta'), theta_coarse)

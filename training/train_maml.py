@@ -40,7 +40,7 @@ def train(
         optimizer.zero_grad()
 
         # clone the model
-        learner = maml.clone().double()
+        learner = maml.clone().double().to(device)
 
         # inner loop, iterative for all base datasets
         running_loss_inner = 0.0
@@ -60,7 +60,7 @@ def train(
                 outputs_model = learner(inputs.double().to(device))
 
                 # Compute the loss
-                loss = loss_fn(outputs_model.to(device), outputs_true.to(device))
+                loss = loss_fn(outputs_model.double().to(device), outputs_true.double().to(device))
                 running_loss_inner_ds += loss
 
                 # adapt for base training set
@@ -95,7 +95,7 @@ def train(
                 outputs_model = learner(inputs.double().to(device))
 
                 # compute the loss and its gradients
-                loss = loss_fn(outputs_model.to(device), outputs_true.to(device))
+                loss = loss_fn(outputs_model.double().to(device), outputs_true.double().to(device))
                 running_loss_outer_ds += loss
 
             # outer running loss

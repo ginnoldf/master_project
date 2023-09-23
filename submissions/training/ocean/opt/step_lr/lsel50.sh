@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #PBS -N ocean_opt_step_lsel50
 #PBS -A uclb0017
-#PBS -l select=1:ncpus=4:mem=256GB
+#PBS -l select=1:ncpus=4:mem=64GB
 #PBS -l walltime=24:00:00
 #PBS -q casper
 #PBS -j oe

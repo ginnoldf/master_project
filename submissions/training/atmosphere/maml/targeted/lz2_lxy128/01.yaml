@@ -1,5 +1,5 @@
 writer:
-  logdir: runs/atmosphere/maml/randomly_initialized/02
+  logdir: runs/atmosphere/maml/targeted/lz2_lxy128/01
 
 run: maml
 
@@ -10,29 +10,25 @@ data:
     - lz2_lxy16
     - lz2_lxy32
     - lz2_lxy64
-    - lz2_lxy128
     - lz2_lxy256
   targetDatasets:
-    - lz2_lxy16
-    - lz2_lxy32
-    - lz2_lxy64
     - lz2_lxy128
-    - lz2_lxy256
-  batchSizeBase: 512
-  mamlK: 99999999999
+  batchSizeBase: 256
+  mamlK: 200
 
 training:
-  epochs: 25000
-  eval_epochs: 100
+  epochs: 1000
+  eval_epochs: 50
   model:
     name: atmosphere
+    stateDictPath: runs/atmosphere/opt/step_lr/all/model.pt
   loss: mse
-  mamlLR: 0.000001
+  mamlLR: 0.0001
   optimizer:
     name: adam
-    lr: 0.01
+    lr: 0.001
     betas: 0.9, 0.999
   lrScheduler:
     name: step
-    stepStepSize: 5000
+    stepStepSize: 100000
     stepGamma: 0.5

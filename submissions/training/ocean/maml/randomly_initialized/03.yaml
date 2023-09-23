@@ -1,5 +1,5 @@
 writer:
-  logdir: runs/debug
+  logdir: runs/ocean/maml/randomly_initialized/03
 
 run: maml
 
@@ -7,25 +7,31 @@ data:
   category: ocean
   dataConfigPath: datasets/ocean/data_config.yaml
   baseDatasets:
+    - lsel50
     - lsel100
-  targetDatasets:
+    - lsel200
     - lsel400
-  batchSizeBase: 256
+  targetDatasets:
+    - lsel50
+    - lsel100
+    - lsel200
+    - lsel400
+  batchSizeBase: 5000
   mamlK: 3000000
 
 training:
   epochs: 40000
-  eval_epochs: 20
+  eval_epochs: 10
   model:
     name: ocean
-    stateDictPath: runs/ocean/opt/cosine_annealing/lsel100/model.pt
   loss: mse
-  mamlLR: 0.001
+  mamlLR: 0.000001
   optimizer:
     name: adam
-    lr: 0.01
+    lr: 0.001
     betas: 0.9, 0.999
   lrScheduler:
     name: step
     stepStepSize: 50000
     stepGamma: 0.5
+

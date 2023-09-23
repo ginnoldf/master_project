@@ -1,7 +1,7 @@
 #!/bin/bash -l
-#PBS -N maml_ri_02
+#PBS -N ocean_maml_ri_03
 #PBS -A uclb0017
-#PBS -l select=1:ncpus=4:mem=16GB:ngpus=1
+#PBS -l select=1:ncpus=4:mem=64GB
 #PBS -l walltime=24:00:00
 #PBS -q casper
 #PBS -j oe
@@ -13,4 +13,4 @@ conda activate training_cuda
 export PYTHONPATH=/glade/u/home/fginnold/master_project
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/glade/work/fginnold/conda-envs/training_cuda/lib
 
-python3 training/main.py --config-file=submissions/training/atmosphere/maml/randomly_initialized/02.yaml
+python3 training/main.py --config-file=submissions/training/ocean/maml/randomly_initialized/03.yaml

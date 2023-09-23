@@ -78,10 +78,15 @@ def load_data_ocean(dataset_config: Dict):
     out_test = np.stack([test_vars[var] for var in out_vars], axis=1)
 
     # create torch train and test datasets from numpy arrays
+    np.random.seed(0)
     indices_train = np.random.permutation(len(in_train))
     indices_test = np.random.permutation(len(in_test))
-    dataset_train = TensorDataset(torch.from_numpy(in_train[indices_train[:3000000]]), torch.from_numpy(out_train[indices_train[:3000000]]))
-    dataset_test = TensorDataset(torch.from_numpy(in_test[indices_test[:500000]]), torch.from_numpy(out_test[indices_test[:500000]]))
+    train_size = dataset_config['trainSize']
+    test_size = dataset_config['testSize']
+    dataset_train = TensorDataset(torch.from_numpy(in_train[indices_train[:train_size]]),
+                                  torch.from_numpy(out_train[indices_train[:train_size]]))
+    dataset_test = TensorDataset(torch.from_numpy(in_test[indices_test[:test_size]]),
+                                 torch.from_numpy(out_test[indices_test[:test_size]]))
 
     return dataset_train, dataset_test
 

@@ -1,13 +1,21 @@
 datasets:
-#  - name: lsel50
-#    lsel: 50
-#   directory: datasets/ocean/lsel50
+  - name: lsel50
+    lsel: 50
+    directory: datasets/ocean/lsel50
+    trainSize: 500000
+    testSize: 20000
   - name: lsel100
     lsel: 100
     directory: datasets/ocean/lsel100
+    trainSize: 500000
+    testSize: 20000
   - name: lsel200
     lsel: 200
     directory: datasets/ocean/lsel200
+    trainSize: 500000
+    testSize: 20000
   - name: lsel400
     lsel: 400
     directory: datasets/ocean/lsel400
+    trainSize: 500000
+    testSize: 20000

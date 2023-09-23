@@ -74,5 +74,25 @@ notes:
 - what is expected from my thesis document? present structure so far
 - should we continue with transfer learning somehow?
 - thesis document specific questions:
-  - 
-  - 
+  - include training plots?
+  - how far should I go in explaining LES
+  - problem with staying too close to saras paper
+
+notes:
+- smagorinsky paper on closure diffusion \delta ^2 times gradient
+- explainable ai with sara
+- plots over tables
+- ocean data may be to similar in scales, next possible steps:
+  - normalization not separatly
+  - larger scales?
+
+### questions for Sara
+- your paper line 350 - what has the buckingham-pi theorem to do with this parameter choice?
+- your paper line 351 - is the scaling parameter theta_0?
+- your paper line 322 - what is L in equation 6, should it be N?3
+
+
+### Meeting 20/09
+james agu template (journal of ...)
+Bardina model
+
